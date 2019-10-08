@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.DetailActivity">
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_detail"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="#000"
+        android:baselineAligned="false" />
+
+
+    <TextView
+        android:id="@+id/text_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/printable4u"
+        android:gravity="center"
+        android:text="รายละเอียด"
+        android:textColor="#FFF"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/button_back_listmenu"
+        android:layout_width="41dp"
+        android:layout_height="33dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/ic_back" />
+
+    <ScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar_detail"
+        android:layout_marginTop="-2dp"
+        android:background="#000">
+
+        <RelativeLayout
+            android:id="@+id/relative"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/img_menu_detail"
+                android:layout_width="fill_parent"
+                android:layout_height="270dp"
+                android:layout_centerHorizontal="true"
+                android:scaleType="fitXY"
+                />
+
+
+            <TextView
+                android:id="@+id/name_menu_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/img_menu_detail"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/printable4u"
+                android:text="ชื่ออาหาร"
+                android:textColor="#FFF"
+                android:textSize="30dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/cate_menu_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/name_menu_detail"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/printable4u"
+                android:text="ประเภทอาหาร"
+                android:textColor="#FFF"
+                android:textSize="23dp"
+                android:textStyle="bold" />
+
+
+            <LinearLayout
+                android:id="@+id/layout2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cate_menu_detail"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="15dp">
+
+                <TextView
+                    android:id="@+id/textview_yin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="15dp"
+                    android:fontFamily="@font/printable4u"
+                    android:text="ค่าหยิน  "
+                    android:textColor="#FFF"
+                    android:textSize="23dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/yin_menu_detail"
+                    android:layout_weight="1"
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:fontFamily="@font/printable4u"
+                    android:layout_height="wrap_content"
+                    android:textColor="#FFF"
+                    android:textSize="23dp"
+                    android:textStyle="bold"
+                    />
+
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/layout2"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="15dp">
+
+                <TextView
+                    android:id="@+id/textview_yang"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="15dp"
+                    android:fontFamily="@font/printable4u"
+                    android:text="ค่าหยาง  "
+                    android:textColor="#FFF"
+                    android:textSize="23dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/yang_menu_detail"
+                    android:layout_weight="1"
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:fontFamily="@font/printable4u"
+                    android:layout_height="wrap_content"
+                    android:textColor="#FFF"
+                    android:textSize="23dp"
+                    android:textStyle="bold"
+                    />
+            </LinearLayout>
+
+
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

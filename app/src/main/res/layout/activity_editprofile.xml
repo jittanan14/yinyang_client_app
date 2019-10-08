@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#E7E7E7"
+    android:orientation="vertical"
+    tools:context=".activities.EditprofileActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="#000"
+        android:baselineAligned="false" />
+    <TextView
+        android:id="@+id/text_create"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/printable4u"
+        android:gravity="center"
+        android:text="แก้ไขข้อมูลส่วนตัว"
+        android:textColor="#FFFF"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="18dp"
+        android:fontFamily="@font/printable4u"
+        android:text="เสร็จสิ้น"
+        android:textColor="#FFFF"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/button_back_profile"
+        android:layout_width="41dp"
+        android:layout_height="33dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/ic_back" />
+
+    <LinearLayout
+        android:layout_below="@+id/toolbar"
+        android:id="@+id/layout_all"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/user_profile"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="40dp"
+            android:src="@drawable/ic_user" />
+        <TextView
+            android:id="@+id/edit_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center_horizontal"
+            android:text="แก้ไข"
+            android:textSize="20dp"
+            android:fontFamily="@font/printable4u"
+            />
+
+        <LinearLayout
+            android:id="@+id/layout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            >
+
+            <TextView
+                android:layout_width="105dp"
+                android:layout_height="match_parent"
+                android:background="#ffffff"
+                android:drawablePadding="5dp"
+                android:gravity="center_vertical"
+                android:hint="ชื่อผู้ใช้"
+                android:textSize="18dp"
+                android:fontFamily="@font/printable4u"
+                android:padding="10dp" />
+
+            <EditText
+                android:id="@+id/editTextUsername"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:drawablePadding="5dp"
+                android:fontFamily="@font/printable4u"
+                android:gravity="center_vertical"
+                android:hint="ชื่อผู้ใช้"
+                android:textSize="18dp"
+                android:padding="10dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            >
+
+            <TextView
+                android:layout_width="105dp"
+                android:layout_height="match_parent"
+                android:background="#ffffff"
+                android:drawablePadding="5dp"
+                android:gravity="center_vertical"
+                android:hint="วัตถุดิบที่แพ้"
+                android:textSize="18dp"
+                android:fontFamily="@font/printable4u"
+                android:padding="10dp" />
+
+            <EditText
+                android:id="@+id/editTextFood"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:drawablePadding="5dp"
+                android:fontFamily="@font/printable4u"
+                android:gravity="center_vertical"
+                android:hint="วัตถุดิบที่แพ้"
+                android:drawableRight="@drawable/ic_drop_down_arrow"
+                android:textSize="18dp"
+                android:padding="10dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

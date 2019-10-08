@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.Fragment_search">
+
+    <!-- TODO: Update blank fragment layout -->
+    <!--<com.miguelcatalan.materialsearchview.MaterialSearchView-->
+        <!--android:id="@+id/search_view"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:textColor="#FFFFFF"-->
+        <!--android:textColorHint="#FFFFFF"-->
+        <!--app:searchBackIcon="@drawable/ic_arrow_back_black_24dp"-->
+        <!--app:searchBackground="@color/colorPrimary"-->
+        <!--app:searchCloseIcon="@drawable/ic_action_navigation_close_inverted"-->
+        <!--app:searchSuggestionBackground="@color/colorPrimary"-->
+        <!--app:searchSuggestionIcon="@drawable/ic_suggestion" />-->
+
+</FrameLayout>

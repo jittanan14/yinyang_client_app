@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.Fragment_profile">
+
+    <!-- TODO: Update blank fragment layout -->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/layout_all"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/user_profile"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="40dp"
+                    android:src="@drawable/ic_user" />
+
+                <LinearLayout
+                    android:id="@+id/layout_dataprofile"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/layout_all"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="10dp"
+                    android:background="#FFFF"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/username_text_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_person"
+                        android:fontFamily="@font/printable4u"
+                        android:text=" ชื่อผู้ใช้"
+                        android:textSize="18dp" />
+
+
+                    <TextView
+                        android:id="@+id/email_text_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:drawableLeft="@drawable/ic_email2"
+                        android:fontFamily="@font/printable4u"
+                        android:text=" อีเมล :"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:id="@+id/gender_text_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:drawableLeft="@drawable/ic_wc_black_24dp"
+                        android:fontFamily="@font/printable4u"
+                        android:text=" เพศ :"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:id="@+id/birth_text_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:drawableLeft="@drawable/ic_cake_black_24dp"
+                        android:fontFamily="@font/printable4u"
+                        android:text=" วันเกิด :"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:id="@+id/element_text_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:drawableLeft="@drawable/ic_drop"
+                        android:fontFamily="@font/printable4u"
+                        android:text=" ธาตุ :"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:id="@+id/foodlose_text_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:drawableLeft="@drawable/ic_salad_3"
+                        android:fontFamily="@font/printable4u"
+                        android:text="  วัตถุดิบอาหารที่แพ้ :"
+                        android:textSize="18dp" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_editData"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/layout_all"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_grey"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/printable4u"
+                        android:gravity="center_horizontal"
+                        android:text="แก้ไขข้อมูลส่วนตัว"
+                        android:textColor="#FFFF"
+                        android:textSize="23dp"
+                        android:textStyle="bold"
+
+                        />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/layout_dataprofile3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/layout_all"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="10dp"
+                    android:background="#FFFF"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/body_text_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:drawableLeft="@drawable/ic_body"
+                        android:fontFamily="@font/printable4u"
+                        android:text="สภาพร่างกายเป็น :"
+                        android:textSize="18dp" />
+
+                    <LinearLayout
+                        android:id="@+id/layout_num_yhin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_yin"
+                            android:drawablePadding="5dp"
+                            android:fontFamily="@font/printable4u"
+                            android:text="ค่าหยิน : "
+                            android:textColor="#708090"
+                            android:textSize="18dp" />
+
+                        <TextView
+                            android:id="@+id/num_yhin_text_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layout_num_yhang"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_yang"
+                            android:drawablePadding="5dp"
+                            android:fontFamily="@font/printable4u"
+                            android:text="ค่าหยาง : "
+                            android:textColor="#708090"
+                            android:textSize="18dp" />
+
+                        <TextView
+                            android:id="@+id/num_yhang_text_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:layout_marginTop="8dp"
+                        android:background="@color/colorAccent" />
+
+                    <TextView
+                        android:id="@+id/favourite"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:drawableLeft="@drawable/ic_favorite_black_24dp"
+                        android:fontFamily="@font/printable4u"
+                        android:text="อาหารที่ฉันถูกใจ :"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/printable4u"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/printable4u"
+                        android:textSize="18dp" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_Gotoquestion"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/layout_all"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_black"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/printable4u"
+                        android:gravity="center_horizontal"
+                        android:text="แบบสอบถาม"
+                        android:textColor="#FFFF"
+                        android:textSize="23dp"
+                        android:textStyle="bold"
+
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</FrameLayout>
+
