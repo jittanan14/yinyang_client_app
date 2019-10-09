@@ -8,15 +8,61 @@
 
     <!-- TODO: Update blank fragment layout -->
     <!--<com.miguelcatalan.materialsearchview.MaterialSearchView-->
-        <!--android:id="@+id/search_view"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:textColor="#FFFFFF"-->
-        <!--android:textColorHint="#FFFFFF"-->
-        <!--app:searchBackIcon="@drawable/ic_arrow_back_black_24dp"-->
-        <!--app:searchBackground="@color/colorPrimary"-->
-        <!--app:searchCloseIcon="@drawable/ic_action_navigation_close_inverted"-->
-        <!--app:searchSuggestionBackground="@color/colorPrimary"-->
-        <!--app:searchSuggestionIcon="@drawable/ic_suggestion" />-->
+    <!--android:id="@+id/search_view"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:textColor="#FFFFFF"-->
+    <!--android:textColorHint="#FFFFFF"-->
+    <!--app:searchBackIcon="@drawable/ic_arrow_back_black_24dp"-->
+    <!--app:searchBackground="@color/colorPrimary"-->
+    <!--app:searchCloseIcon="@drawable/ic_action_navigation_close_inverted"-->
+    <!--app:searchSuggestionBackground="@color/colorPrimary"-->
+    <!--app:searchSuggestionIcon="@drawable/ic_suggestion" />-->
+
+
+
+    <RelativeLayout
+        android:id="@+id/layout_list_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/layout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFF"
+            >
+
+        <EditText
+            android:id="@+id/editText_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/printable4u"
+            android:textSize="23dp"
+
+            />
+
+        <ImageView
+            android:id="@+id/imgView_serch"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/ic_search_black"
+            android:layout_marginTop="5dp"
+            android:layout_alignRight="@id/editText_search"
+            android:layout_marginRight="18dp"
+            />
+        </RelativeLayout>
+
+        <ListView
+            android:id="@+id/lstView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/layout1"
+            />
+
+
+    </RelativeLayout>
+
+
 
 </FrameLayout>

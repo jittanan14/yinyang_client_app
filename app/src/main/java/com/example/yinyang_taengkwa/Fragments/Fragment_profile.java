@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.example.yinyang_taengkwa.Question;
 import com.example.yinyang_taengkwa.R;
 import com.example.yinyang_taengkwa.activities.EditprofileActivity;
+import com.example.yinyang_taengkwa.activities.FavoriteActivity;
 import com.example.yinyang_taengkwa.api.RetrofitClient;
 import com.example.yinyang_taengkwa.models.User;
 import com.squareup.picasso.Picasso;
@@ -34,7 +35,8 @@ import static android.content.Context.MODE_PRIVATE;
 public class Fragment_profile extends Fragment {
 
     private CircleImageView userProfile;
-    private TextView emailTextView, usernameTextView, genderTextView, birthdayTextView, elementTextView, foodLoseTextView, bodyTextView, numYhinTextView, numYhangTextView;
+    private TextView emailTextView, usernameTextView, genderTextView, birthdayTextView, elementTextView, foodLoseTextView, bodyTextView, numYhinTextView, numYhangTextView,
+    favorite;
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
     private String PREF_NAME = "Log in";
@@ -71,6 +73,7 @@ public class Fragment_profile extends Fragment {
         numYhinTextView = view.findViewById(R.id.num_yhin_text_view);
         numYhangTextView = view.findViewById(R.id.num_yhang_text_view);
         userProfile = view.findViewById(R.id.user_profile);
+        favorite = view.findViewById(R.id.favourite);
 
       //  Pull to Refresh
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
@@ -116,6 +119,13 @@ public class Fragment_profile extends Fragment {
             Picasso.get().load(url1).into(userProfile);
         }
 
+
+        favorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getContext(), FavoriteActivity.class));
+            }
+        });
 
         layout_Gotoquestion.setOnClickListener(new View.OnClickListener() {
             @Override

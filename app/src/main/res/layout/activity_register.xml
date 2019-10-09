@@ -8,7 +8,7 @@
     android:orientation="vertical"
     tools:context=".activities.RegisterActivity">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="55dp"
@@ -68,7 +68,7 @@
             android:orientation="vertical"
             android:padding="10dp">
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/TextEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -81,7 +81,7 @@
                 app:errorEnabled="true">
 
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/ic_email2"
@@ -91,7 +91,8 @@
                     android:inputType="textEmailAddress"
                     android:textColorHint="#708090" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
+
         </LinearLayout>
             <LinearLayout
                 android:id="@+id/layout5"
@@ -117,7 +118,7 @@
                     android:layout_marginLeft="10dp"
                     android:orientation="vertical">
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/Password"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -127,15 +128,15 @@
                         app:errorEnabled="true"
                         app:passwordToggleEnabled="true">
 
-                        <android.support.design.widget.TextInputEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/edpoonpunn"
                             android:inputType="textPassword" />
 
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/confirm_pass"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -145,13 +146,13 @@
                         app:errorEnabled="true"
                         app:passwordToggleEnabled="true">
 
-                        <android.support.design.widget.TextInputEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/edpoonpunn"
                             android:inputType="textPassword" />
 
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
 
@@ -168,7 +169,7 @@
                 android:orientation="vertical"
                 android:padding="10dp">
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/Text_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -179,7 +180,7 @@
                     app:counterMaxLength="50"
                     app:errorEnabled="true">
 
-                    <android.support.design.widget.TextInputEditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableLeft="@drawable/ic_person"
@@ -189,7 +190,7 @@
                         android:inputType="text"
                         android:textColor="#708090" />
 
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"

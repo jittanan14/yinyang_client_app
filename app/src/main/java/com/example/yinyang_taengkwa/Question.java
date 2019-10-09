@@ -65,7 +65,14 @@ public class Question extends AppCompatActivity implements View.OnClickListener 
         button_confirmall = findViewById(R.id.button_confirmall);
         button_confirmall.setOnClickListener(this);
         button_back_login = findViewById(R.id.button_back_login);
-        button_back_login.setOnClickListener(this);
+
+        button_back_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         radioGroup = findViewById(R.id.radio_answer);
         retro = new RetrofitClient();
 
@@ -337,9 +344,6 @@ public class Question extends AppCompatActivity implements View.OnClickListener 
             @Override
             public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
                 DefaultResponse res = response.body();
-//                if(res.isStatus()){
-//
-//                }
             }
 
             @Override

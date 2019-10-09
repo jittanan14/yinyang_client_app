@@ -32,6 +32,7 @@ public class Fragment_foodcomment extends Fragment {
 
     RecyclerView recyclerView;
     private SharedPreferences sp;
+
     public Fragment_foodcomment() {
         // Required empty public constructor
     }

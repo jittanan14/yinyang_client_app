@@ -46,6 +46,13 @@ public interface Api {
     );
 
     @FormUrlEncoded
+    @POST("update_favorite.php")
+    Call<DefaultResponse> updateFavorite (
+            @Field("name_menu") String name_menu,
+            @Field("favorite_menu") int favorite_menu
+    );
+
+    @FormUrlEncoded
     @POST("update_profile.php")
     Call<DefaultResponse> updateProfile (
             @Field("email_user") String email_user,

@@ -206,27 +206,15 @@
 
                     <TextView
                         android:id="@+id/favourite"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:drawableLeft="@drawable/ic_favorite_black_24dp"
                         android:fontFamily="@font/printable4u"
-                        android:text="อาหารที่ฉันถูกใจ :"
-                        android:textSize="18dp" />
+                        android:layout_gravity="center_horizontal"
+                        android:text="อาหารที่ฉันถูกใจ "
+                        android:textSize="23dp" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:fontFamily="@font/printable4u"
-                        android:textSize="18dp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:fontFamily="@font/printable4u"
-                        android:textSize="18dp" />
 
 
                 </LinearLayout>

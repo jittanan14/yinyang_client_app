@@ -52,10 +52,9 @@
             <ImageView
                 android:id="@+id/img_menu_detail"
                 android:layout_width="fill_parent"
-                android:layout_height="270dp"
+                android:layout_height="290dp"
                 android:layout_centerHorizontal="true"
-                android:scaleType="fitXY"
-                />
+                android:scaleType="fitXY" />
 
 
             <TextView
@@ -107,17 +106,15 @@
 
                 <TextView
                     android:id="@+id/yin_menu_detail"
-                    android:layout_weight="1"
-                    android:layout_centerHorizontal="true"
                     android:layout_width="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:fontFamily="@font/printable4u"
                     android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="15dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/printable4u"
                     android:textColor="#FFF"
                     android:textSize="23dp"
-                    android:textStyle="bold"
-                    />
-
+                    android:textStyle="bold" />
 
 
             </LinearLayout>
@@ -144,19 +141,153 @@
 
                 <TextView
                     android:id="@+id/yang_menu_detail"
-                    android:layout_weight="1"
-                    android:layout_centerHorizontal="true"
                     android:layout_width="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:fontFamily="@font/printable4u"
                     android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="15dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/printable4u"
                     android:textColor="#FFF"
                     android:textSize="23dp"
-                    android:textStyle="bold"
-                    />
+                    android:textStyle="bold" />
             </LinearLayout>
 
+            <LinearLayout
+            android:id="@+id/layout_expansion"
+            android:layout_below="@id/layout3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="vertical"
+            android:background="#000">
 
+            <com.github.florent37.expansionpanel.ExpansionHeader
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:expansion_headerIndicator="@id/headerIndicator1"
+                app:expansion_layout="@id/expansionLayout1"
+                app:expansion_toggleOnClick="true">
+
+                <!-- HEADER -->
+
+                ...
+                <!-- HEADER INDICATOR -->
+                <RelativeLayout
+                    android:id="@+id/relative_ingre"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:background="#D3D3D3">
+
+                    <TextView
+                        android:id="@+id/textview_ingre"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ส่วนผสม"
+                        android:textSize="23dp"
+                        android:fontFamily="@font/printable4u"
+                        android:textColor="#000"
+                        android:layout_centerHorizontal="true"
+                        />
+
+                    <ImageView
+                        android:id="@+id/headerIndicator1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="16dp"
+                        app:srcCompat="@drawable/ic_expansion_header_indicator_grey_24dp" />
+
+                </RelativeLayout>
+
+            </com.github.florent37.expansionpanel.ExpansionHeader>
+
+            <com.github.florent37.expansionpanel.ExpansionLayout
+                android:id="@+id/expansionLayout1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <!-- CONTENT -->
+                <TextView
+                    android:id="@+id/content_ingre"
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:textColor="#FFF"
+                    android:textSize="23dp"
+                    android:fontFamily="@font/printable4u"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="20dp" />
+
+            </com.github.florent37.expansionpanel.ExpansionLayout>
+
+
+
+                <com.github.florent37.expansionpanel.ExpansionHeader
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:expansion_headerIndicator="@id/headerIndicator2"
+                    app:expansion_layout="@id/expansionLayout2"
+                    app:expansion_toggleOnClick="true">
+
+                    <!-- HEADER -->
+
+                    ...
+                    <!-- HEADER INDICATOR -->
+                    <RelativeLayout
+                        android:id="@+id/relative_howto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:background="#D3D3D3">
+
+                        <TextView
+                            android:id="@+id/textview_howto"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="วิธีทำ"
+                            android:textSize="23dp"
+                            android:fontFamily="@font/printable4u"
+                            android:textColor="#000"
+                            android:layout_centerHorizontal="true"
+                            />
+                        <ImageView
+                            android:id="@+id/headerIndicator2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:adjustViewBounds="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="16dp"
+                            app:srcCompat="@drawable/ic_expansion_header_indicator_grey_24dp" />
+                    </RelativeLayout>
+
+                </com.github.florent37.expansionpanel.ExpansionHeader>
+
+                <com.github.florent37.expansionpanel.ExpansionLayout
+                    android:id="@+id/expansionLayout2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <!-- CONTENT -->
+                    <TextView
+                        android:id="@+id/content_howto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#FFF"
+                        android:textSize="23dp"
+                        android:fontFamily="@font/printable4u"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="10dp"
+                        />
+
+                </com.github.florent37.expansionpanel.ExpansionLayout>
+
+         </LinearLayout>
 
         </RelativeLayout>
 

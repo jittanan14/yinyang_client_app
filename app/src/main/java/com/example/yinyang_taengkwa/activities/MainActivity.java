@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     String PREF_NAME = "Log in";
     TextView text_create;
     ActionBar toolbar;
-    Button logout,search;
+    Button logout;
     ListView lstView ;
     MaterialSearchView searchView;
 
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         logout = findViewById(R.id.button_logout);
         text_create = findViewById(R.id.text_create);
         logout = findViewById(R.id.button_logout);
-        search = findViewById(R.id.button_search);
+
 
         sp = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
 
@@ -79,7 +79,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 //        lstView = (ListView)findViewById(R.id.list_view_search);
 //        getToServer(lstView);
         logout.setVisibility(View.GONE);
-        search.setVisibility(View.GONE);
 
         if (!sp.getBoolean("SIGNIN", false)) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
@@ -139,12 +138,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 text_create.setText("รายการอาหารที่แนะนำ");
                 loadFragment(foodFregment);
                 logout.setVisibility(View.GONE);
-                search.setVisibility(View.GONE);
+
                 return true;
             case R.id.search:
                 text_create.setText("ค้นหาเมนูอาหาร");
                 loadFragment(searchFragment);
-                search.setVisibility(View.VISIBLE);
                 logout.setVisibility(View.GONE);
 
                 return true;
@@ -152,13 +150,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 text_create.setText("ประวัติการรับประทานอาหาร");
                 loadFragment(graphFragment);
                 logout.setVisibility(View.GONE);
-                search.setVisibility(View.GONE);
                 return true;
             case R.id.profile:
                 text_create.setText("โปรไฟล์ของฉัน");
                 loadFragment(profileFragment);
                 logout.setVisibility(View.VISIBLE);
-                search.setVisibility(View.GONE);
                 return true;
         }
 
@@ -197,7 +193,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 //            }
 //        });
 //    }
-
 
     public boolean OnCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.menu, (android.view.Menu) menu);

@@ -10,7 +10,9 @@ import android.widget.TextView;
 
 import com.example.yinyang_taengkwa.R;
 import com.example.yinyang_taengkwa.models.Menu;
+import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -18,7 +20,7 @@ public class SearchAdapter extends ArrayAdapter<Menu> {
     Context mContext;
     List<Menu> menuList;
     int resId;
-
+    private String url = "http://pilot.cp.su.ac.th/usr/u07580536/yhinyhang/images/menu/";
 
 
     public SearchAdapter(Context context, int resource, List<Menu> objects) {
@@ -38,19 +40,20 @@ public class SearchAdapter extends ArrayAdapter<Menu> {
         TextView textView_num_yhin_textview = view.findViewById(R.id.num_yhin_textview);
         TextView textView_num_yhang_textview = view.findViewById(R.id.num_yhang_textview);
         ImageView img_cate = view.findViewById(R.id.img_category);
+        ImageView img_menu = view.findViewById(R.id.img_menu);
 
         Menu menu = menuList.get(position);
 
         name.setText(menu.getName_menu());
         category.setText(menu.getCategory_menu());
 
+        Picasso.get().load(url.concat(menu.getImage_menu())).into(img_menu);
         textView_num_yhin_textview.setText(menu.getNum_yhin());
         textView_num_yhang_textview.setText(menu.getNum_yhang());
 
-        if(Double.valueOf(menu.getNum_yhin()) > Double.valueOf(menu.getNum_yhang())){
+        if (Double.valueOf(menu.getNum_yhin()) > Double.valueOf(menu.getNum_yhang())) {
             img_cate.setImageResource(R.drawable.ic_yin);
-        }
-        else {
+        } else {
             img_cate.setImageResource(R.drawable.ic_yang);
         }
 
@@ -58,5 +61,10 @@ public class SearchAdapter extends ArrayAdapter<Menu> {
 //        imageView.setBackgroundResource(resId[position]);
 
         return view;
+    }
+
+    public void filterList(ArrayList arr){
+        this.menuList = arr;
+        notifyDataSetChanged();
     }
 }
