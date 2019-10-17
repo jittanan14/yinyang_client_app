@@ -22,15 +22,17 @@
         <activity android:name=".Question_layout" />
         <activity android:name=".activities.DetailActivity" />
         <activity android:name=".activities.RegisterActivity" />
-        <activity android:name=".activities.LoadingActivity" />
-        <activity android:name=".Question" />
-        <activity android:name=".activities.LoginActivity" />
-        <activity android:name=".activities.MainActivity">
+        <activity android:name=".activities.LoadingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".Question" />
+        <activity android:name=".activities.LoginActivity" />
+        <activity android:name=".activities.MainActivity">
+
         </activity>
     </application>
 

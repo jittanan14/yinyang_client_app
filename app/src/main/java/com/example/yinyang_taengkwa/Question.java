@@ -279,7 +279,7 @@ public class Question extends AppCompatActivity implements View.OnClickListener 
         questionArray.add("คุณท้องผูกบ่อยแค่ไหน ?");
         questionArray.add("คุณปัสสาวะเหลืองเข้มบ่อยแค่ไหน ?");
         questionArray.add("ฝ่ามือและฝ่าเท้าของคุณเย็นง่ายบ่อยแค่ไหน ?");
-        questionArray.add("คุณปัสสาวะบ่อยตอนกลางคืนบ่อยแค่ไหน ?");
+        questionArray.add("คุณปัสสาวะตอนกลางคืนบ่อยแค่ไหน ?");
 
         Score = new int[questionArray.size()];
 

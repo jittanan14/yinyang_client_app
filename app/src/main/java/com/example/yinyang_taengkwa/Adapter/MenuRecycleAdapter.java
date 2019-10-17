@@ -177,6 +177,10 @@ public class MenuRecycleAdapter extends RecyclerView.Adapter<MenuRecycleAdapter.
 
 
     }
+    public void filterList(ArrayList arr){
+        this.mMenuList = arr;
+        notifyDataSetChanged();
+    }
 
 
 }
