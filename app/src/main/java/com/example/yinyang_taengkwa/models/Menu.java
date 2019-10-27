@@ -8,8 +8,9 @@ public class Menu implements Parcelable  {
 
     private String name,num_yhin,num_yhang,category,ingredient,howto,image;
     private int favorite;
+    private int choose;
 
-    public Menu(String name, String num_yhin, String num_yhang, String category, String ingredient, String howto, String image, int favorite){
+    public Menu(String name, String num_yhin, String num_yhang, String category, String ingredient, String howto, String image, int favorite,int choose){
         this.name = name;
         this.num_yhin = num_yhin;
         this.num_yhang = num_yhang;
@@ -18,6 +19,7 @@ public class Menu implements Parcelable  {
         this.howto = howto;
         this.image = image;
         this.favorite = favorite;
+        this.choose = choose;
 
     }
 
@@ -30,6 +32,7 @@ public class Menu implements Parcelable  {
         howto = in.readString();
         image = in.readString();
         favorite = in.readInt();
+        choose = in.readInt();
     }
 
     public static final Creator<Menu> CREATOR = new Creator<Menu>() {
@@ -62,6 +65,8 @@ public class Menu implements Parcelable  {
         return favorite;
     }
 
+    public int getChoose_Menu(){return choose; }
+
     @Override
     public int describeContents() {
         return 0;
@@ -77,10 +82,15 @@ public class Menu implements Parcelable  {
         parcel.writeString(howto);
         parcel.writeString(image);
         parcel.writeInt(favorite);
+        parcel.writeInt(choose);
     }
 
     public void setFavorite(int favorite) {
         this.favorite = favorite;
 
+    }
+
+    public void setChoose(int choose){
+        this.choose = choose;
     }
 }

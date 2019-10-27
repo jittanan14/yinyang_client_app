@@ -36,11 +36,13 @@ public class CustomAdapter extends ArrayAdapter<Menu> {
 
         TextView name = view.findViewById(R.id.name_menu_textview);
         TextView category = view.findViewById(R.id.category_textview);
-        TextView textView_num_yhin_textview = view.findViewById(R.id.num_yhin_textview);
-        TextView textView_num_yhang_textview = view.findViewById(R.id.num_yhang_textview);
+        TextView textView_num_yhin_textview = view.findViewById(R.id.num_yhin_text_view);
+        TextView textView_num_yhang_textview = view.findViewById(R.id.num_yhang_text_view);
+
         ImageView ImageView = view.findViewById(R.id.imageView1);
         ImageView img_cate = view.findViewById(R.id.img_category);
        final ToggleButton fav = view.findViewById(R.id.favourite);
+       final ToggleButton choose = view.findViewById(R.id.choose_menu);
 
         fav.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -50,6 +52,18 @@ public class CustomAdapter extends ArrayAdapter<Menu> {
                 }
                 else {
                     fav.setBackgroundResource(R.drawable.ic_favorite_border_black_24dp);
+                }
+            }
+        });
+
+        choose.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked == true) {
+                    choose.setBackgroundResource(R.drawable.checkmark2);
+                }
+                else {
+                    choose.setBackgroundResource(R.drawable.checkmark_choose);
                 }
             }
         });

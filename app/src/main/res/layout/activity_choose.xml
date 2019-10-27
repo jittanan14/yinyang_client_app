@@ -4,9 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".activities.FavoriteActivity"
-    android:background="#FFF">
+    tools:context=".activities.ChooseActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -25,34 +23,24 @@
 
 
     <TextView
-        android:id="@+id/text_favorite"
+        android:id="@+id/text_choose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:fontFamily="@font/printable4u"
         android:gravity="center"
-        android:text="อาหารที่ฉันถูกใจ  "
-        android:drawableRight="@drawable/ic_favorite_black_24dp"
+        android:text="อาหารที่ฉันกิน "
+        android:drawableRight="@drawable/ic_checkmark"
         android:textColor="#FFFF"
         android:textSize="20sp" />
 
 
-
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            android:layout_marginTop="16dp"
-            android:layout_below="@id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-
-
-
-
-
-
-
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_marginTop="16dp"
+        android:layout_below="@id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </RelativeLayout>

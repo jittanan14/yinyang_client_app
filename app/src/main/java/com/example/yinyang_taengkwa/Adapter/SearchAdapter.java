@@ -37,10 +37,10 @@ public class SearchAdapter extends ArrayAdapter<Menu> {
 
         TextView name = view.findViewById(R.id.name_menu_textview);
         TextView category = view.findViewById(R.id.category_textview);
-        TextView textView_num_yhin_textview = view.findViewById(R.id.num_yhin_textview);
-        TextView textView_num_yhang_textview = view.findViewById(R.id.num_yhang_textview);
+        TextView textView_num_yhin_textview = view.findViewById(R.id.num_yhin_text_view);
+        TextView textView_num_yhang_textview = view.findViewById(R.id.num_yhang_text_view);
         ImageView img_cate = view.findViewById(R.id.img_category);
-        ImageView img_menu = view.findViewById(R.id.img_menu);
+        ImageView img_menu = view.findViewById(R.id.imageView1);
 
         Menu menu = menuList.get(position);
 

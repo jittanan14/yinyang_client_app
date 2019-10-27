@@ -16,23 +16,30 @@ import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.yinyang_taengkwa.Question;
+import com.example.yinyang_taengkwa.Question_list;
 import com.example.yinyang_taengkwa.R;
 import com.example.yinyang_taengkwa.api.RetrofitClient;
 import com.example.yinyang_taengkwa.models.DefaultResponse;
 import com.google.android.material.textfield.TextInputLayout;
+import com.skyhope.materialtagview.TagView_me;
+import com.skyhope.materialtagview.model.TagModel;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import androidx.appcompat.app.AlertDialog;
@@ -65,6 +72,10 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
     TextView text_body;
     RadioGroup radioGroup_gender;
     CircleImageView pic_profile;
+    CheckBox cb;
+    TagView_me tagview;
+    String textfood="";
+
 
     ArrayList<String> item = new ArrayList<>();
     SpinnerDialog spinnerDialog;
@@ -94,24 +105,29 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
 
         getSupportActionBar().hide();
 
+        LinearLayout linearLayout = new LinearLayout(RegisterActivity.this);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+
+
         initItems();
-        spinnerDialog = new SpinnerDialog(RegisterActivity.this,item,"กรุณาเลือกวัตถุดิบที่แพ้");
+
+        spinnerDialog = new SpinnerDialog(RegisterActivity.this, item, "กรุณาเลือกวัตถุดิบที่แพ้");
         spinnerDialog.bindOnSpinerListener(new OnSpinerItemClick() {
             @Override
             public void onClick(String item, int position) {
 
-               food_lose.setText(item);
+                tagview.addTag(item,false);
             }
         });
 
 
-       food_lose = (TextView)findViewById(R.id.food_lose_textview);
-       food_lose.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View view) {
-               spinnerDialog.showSpinerDialog();
-           }
-       });
+        food_lose = (TextView) findViewById(R.id.food_lose_textview);
+        food_lose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                spinnerDialog.showSpinerDialog();
+            }
+        });
 
         date_birth = findViewById(R.id.date_birth);
         text_view_birth = findViewById(R.id.text_date);
@@ -121,6 +137,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         back_login = findViewById(R.id.button_back_login);
         radioGroup_gender = findViewById(R.id.radioGroup_gender);
         CircleImageViewProfile = findViewById(R.id.pic_user);
+        tagview = findViewById(R.id.tagview);
 
         // user
         Text_Email = findViewById(R.id.TextEmail);
@@ -134,6 +151,11 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         text_body = findViewById(R.id.body);
         food_lose = findViewById(R.id.food_lose_textview);
         pic_profile = findViewById(R.id.pic_user);
+
+        tagview.setText("ไม่มี");
+        tagview.addTagLimit(10);
+        tagview.setTagBackgroundColor("#FF9B9B9B");
+        tagview.setTagTextColor("#FF070707");
 
         pic_profile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -301,7 +323,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         });
     }
 
-    private void initItems(){
+    private void initItems() {
         item.add("ไม่มี");
         item.add("เนื้อปู");
         item.add("เนื้อเป็ด");
@@ -437,7 +459,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         );
 
         c.setTime(today);
-        c.add( Calendar.YEAR, -10  ); // Subtract 6 months
+        c.add(Calendar.YEAR, -10); // Subtract 6 months
         long maxDate = c.getTime().getTime(); // Twice!
         datePickerDialog.getDatePicker().setMaxDate(maxDate);
         datePickerDialog.show();
@@ -543,6 +565,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
             yhinyhang.setText("หยาง");
             return "หยาง";
         }
+
         return "";
     }
 
@@ -615,19 +638,10 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         }
     }
 
-    private boolean validateFoodLose() {
-        String FoodLose = food_lose.getText().toString().trim();
-        if (FoodLose.isEmpty()) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-
     private boolean validationError() {
-        if (!validateEmail() || !validatePassword() || !validateConfirmPassword() || !validateUsername() || !validateBD() || image_user.equals("")) {
+        if (!validateEmail() || !validatePassword() || !validateConfirmPassword() || !validateUsername() || !validateBD()) {
             return false;
+            //|| image_user.equals("")
         } else {
             return true;
         }
@@ -689,7 +703,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         if (!validationError()) {
             Toast.makeText(this, "กรอกข้อมูลไม่ครบ", Toast.LENGTH_LONG).show();
             return;
-        } else if (food_lose.getText().toString().isEmpty()) {
+        } else if (tagview.getSelectedTags().isEmpty()) {
             Toast.makeText(this, "กรุณาระบุวัตถุดิบอาหารที่แพ้", Toast.LENGTH_SHORT).show();
         } else {
             sendToServer();
@@ -702,26 +716,22 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         String username = name_edit.getEditText().getText().toString().trim();
         String gender = CheckGender();
         String birthday = text_birth.getText().toString();
-        String food = food_lose.getText().toString();
+        List<TagModel> food = tagview.getSelectedTags();
 
 
-        Log.e("Email", email);
-        Log.e("Pass", password);
-        Log.e("User", username);
-        Log.e("Gender", gender);
-        Log.e("Birthday", birthday);
-        Log.e("Food", food);
-        Log.e("Element", string_element);
-        Log.e("YY", yhinORyhang(e));
+        for(int i=0; i< food.size(); i++){
+            textfood += food.get(i).getTagText()+",";
+        }
 
-
-        Call<DefaultResponse> call = RetrofitClient.getInstance().getApi().createUser(email, password, username, gender, birthday, string_element, food, image_user, yhinORyhang(e), 0, 0);
+        Call<DefaultResponse> call = RetrofitClient.getInstance().getApi().createUser(email, password, username, gender, birthday, string_element, textfood, "", yhinORyhang(e), 0, 0);
         call.enqueue(new Callback<DefaultResponse>() {
             @Override
             public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
                 if (response.body().isStatus()) {
                     Toast.makeText(RegisterActivity.this, "สมัครสมาชิกสำเร็จ", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+
+                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                    intent.putExtra("yhinyhang", yhinyhang.getText().toString().trim());
                     startActivity(intent);
                     finish();
                 }

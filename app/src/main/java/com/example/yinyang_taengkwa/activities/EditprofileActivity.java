@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,10 +20,15 @@ import android.widget.Toast;
 import com.example.yinyang_taengkwa.R;
 import com.example.yinyang_taengkwa.api.RetrofitClient;
 import com.example.yinyang_taengkwa.models.DefaultResponse;
+import com.skyhope.materialtagview.TagView_me;
+import com.skyhope.materialtagview.model.TagModel;
 import com.squareup.picasso.Picasso;
+
+import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,7 +44,7 @@ public class EditprofileActivity extends AppCompatActivity {
     Button back_profile;
     TextView edit_image;
     TextView confirm;
-    EditText editText_food;
+    TextView Text_food;
     EditText editTextUsername;
     CircleImageView CircleImageViewProfile;
     private int SELECT_IMAGE = 1001;
@@ -46,9 +52,12 @@ public class EditprofileActivity extends AppCompatActivity {
     SpinnerDialog spinnerDialog;
     ArrayList<String> item = new ArrayList<>();
     SharedPreferences sp;
-    SharedPreferences.Editor edit ;
+    SharedPreferences.Editor edit;
     String PREF_NAME = "Log in";
     String image_user = "";
+    TagView_me tagview;
+    int clickimg = 0;
+    String textfood = "";
 
     String url = "http://pilot.cp.su.ac.th/usr/u07580536/yhinyhang/images/profile/";
 
@@ -60,24 +69,30 @@ public class EditprofileActivity extends AppCompatActivity {
 
 
         Intent intent = getIntent();
-        final String image = intent.getStringExtra("Image");
-         String username = intent.getStringExtra("Username");
+        final String image = intent.getStringExtra("image");
+        String username = intent.getStringExtra("username");
         String foodLose = intent.getStringExtra("foodLose");
-
-
 
 
         back_profile = findViewById(R.id.button_back_profile);
         edit_image = findViewById(R.id.edit_image);
         CircleImageViewProfile = findViewById(R.id.user_profile);
-        editText_food = findViewById(R.id.editTextFood);
-        editText_food.setText(foodLose);
+
+        Text_food = findViewById(R.id.TextviewFood);
+
+        tagview = findViewById(R.id.tagview);
+
         confirm = findViewById(R.id.confirm);
+
         editTextUsername = findViewById(R.id.editTextUsername);
         editTextUsername.setText(username);
 
+        tagview.addTagLimit(10);
+        tagview.setTagBackgroundColor("#FF9B9B9B");
+        tagview.setTagTextColor("#FF070707");
 
-        if(image.isEmpty()) {
+
+        if (image.isEmpty()) {
             CircleImageViewProfile.setImageResource(R.drawable.ic_user);
         } else {
 
@@ -101,15 +116,21 @@ public class EditprofileActivity extends AppCompatActivity {
 
                         String email = sp.getString("email", "");
                         final String username2 = editTextUsername.getText().toString().trim();
-                        final String food = editText_food.getText().toString().trim();
+                        final String food = Text_food.getText().toString().trim();
 
 
-                        if(image_user.isEmpty()){
+                        if (image_user.isEmpty()) {
                             image_user = image;
-
                         }
 
-                        Call<DefaultResponse> call = RetrofitClient.getInstance().getApi().updateProfile(email, image_user, username2, food);
+                        List<TagModel> foodd = tagview.getSelectedTags();
+
+                        for (int i = 0; i < foodd.size(); i++) {
+                            textfood += foodd.get(i).getTagText() + ",";
+                        }
+
+
+                        Call<DefaultResponse> call = RetrofitClient.getInstance().getApi().updateProfile(email, image_user, username2, textfood);
                         call.enqueue(new Callback<DefaultResponse>() {
                             @Override
                             public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
@@ -121,8 +142,8 @@ public class EditprofileActivity extends AppCompatActivity {
                                     edit = sp.edit();
 
                                     edit.putString("image", image_user);
-                                    edit.putString("username",username2);
-                                    edit.putString("foodLose", food);
+                                    edit.putString("username", username2);
+                                    edit.putString("foodLose", textfood);
                                     edit.commit();
                                     finish();
 
@@ -163,6 +184,7 @@ public class EditprofileActivity extends AppCompatActivity {
         edit_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(Intent.createChooser(intent, "Select Image from Gallery"), SELECT_IMAGE);
             }
@@ -175,13 +197,13 @@ public class EditprofileActivity extends AppCompatActivity {
             @Override
             public void onClick(String item, int position) {
 
-                editText_food.setText(item);
+                tagview.addTag(item, false);
 
             }
         });
 
 
-        editText_food.setOnClickListener(new View.OnClickListener() {
+        Text_food.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 spinnerDialog.showSpinerDialog();

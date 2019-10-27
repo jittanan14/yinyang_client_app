@@ -8,8 +8,9 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
-
+import com.example.yinyang_taengkwa.Fragments.Fragment_foodcomment;
 import com.example.yinyang_taengkwa.R;
 import com.example.yinyang_taengkwa.api.RetrofitClient;
 import com.example.yinyang_taengkwa.models.DefaultResponse;
@@ -64,6 +65,7 @@ public class MenuRecycleAdapter extends RecyclerView.Adapter<MenuRecycleAdapter.
         holder.yangText.setText(menu.getNum_yhang());
         Picasso.get().load(url.concat(menu.getImage_menu())).into(holder.imageMenu);
         holder.setFavoriteToggle();
+        holder.setChoose_Menu();
 
 
         if (Double.valueOf(menu.getNum_yhin()) > Double.valueOf(menu.getNum_yhang())) {
@@ -90,7 +92,7 @@ public class MenuRecycleAdapter extends RecyclerView.Adapter<MenuRecycleAdapter.
         public TextView nameText, categoryText, yinText, yangText;
         public ImageView imageMenu;
         public ImageView img_cate;
-        public ToggleButton favoriteToggle;
+        public ToggleButton favoriteToggle, chooseCheck;
 
         public Menu menu;
 
@@ -104,6 +106,7 @@ public class MenuRecycleAdapter extends RecyclerView.Adapter<MenuRecycleAdapter.
             imageMenu = itemView.findViewById(R.id.imageView1);
             img_cate = itemView.findViewById(R.id.img_category);
             favoriteToggle = itemView.findViewById(R.id.favorite_toggle_button);
+            chooseCheck = itemView.findViewById(R.id.choose_menu);
 
         }
 
@@ -115,8 +118,6 @@ public class MenuRecycleAdapter extends RecyclerView.Adapter<MenuRecycleAdapter.
                 }
             });
         }
-
-
         public void setFavoriteToggle() {
             if (menu.getFavorite() == 0) {
                 favoriteToggle.setChecked(false);
@@ -176,8 +177,67 @@ public class MenuRecycleAdapter extends RecyclerView.Adapter<MenuRecycleAdapter.
         }
 
 
+        public void setChoose_Menu() {
+
+            if (menu.getChoose_Menu() == 0) {
+                chooseCheck.setChecked(false);
+                chooseCheck.setBackgroundResource(R.drawable.checkmark_choose);
+            } else {
+                chooseCheck.setChecked(true);
+                chooseCheck.setBackgroundResource(R.drawable.checkmark2);
+
+            }
+
+            chooseCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                    if (isChecked) {
+                        chooseCheck.setBackgroundResource(R.drawable.checkmark2);
+                        menu.setChoose(1);
+
+                        Call<DefaultResponse> call = RetrofitClient.getInstance().getApi().updateChoose(menu.getName_menu(), 1);
+                        call.enqueue(new Callback<DefaultResponse>() {
+                            @Override
+                            public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
+                                DefaultResponse res = response.body();
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<DefaultResponse> call, Throwable t) {
+
+                            }
+                        });
+
+                    } else {
+                        chooseCheck.setBackgroundResource(R.drawable.checkmark_choose);
+                        menu.setChoose(0);
+
+                        Call<DefaultResponse> call = RetrofitClient.getInstance().getApi().updateChoose(menu.getName_menu(), 0);
+                        call.enqueue(new Callback<DefaultResponse>() {
+                            @Override
+                            public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
+                                DefaultResponse res = response.body();
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<DefaultResponse> call, Throwable t) {
+
+                            }
+                        });
+
+                        Log.e("Toggle", String.valueOf(chooseCheck.isChecked()));
+                    }
+                }
+            });
+
+        }
+
+
     }
-    public void filterList(ArrayList arr){
+
+    public void filterList(ArrayList arr) {
         this.mMenuList = arr;
         notifyDataSetChanged();
     }

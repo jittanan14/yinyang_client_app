@@ -53,6 +53,13 @@ public interface Api {
     );
 
     @FormUrlEncoded
+    @POST("update_choosemenu.php")
+    Call<DefaultResponse> updateChoose (
+            @Field("name_menu") String name_menu,
+            @Field("choose_menu") int choose_menu
+    );
+
+    @FormUrlEncoded
     @POST("update_profile.php")
     Call<DefaultResponse> updateProfile (
             @Field("email_user") String email_user,

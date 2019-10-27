@@ -10,11 +10,13 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.yinyang_taengkwa.activities.LoginActivity;
 import com.example.yinyang_taengkwa.activities.MainActivity;
 import com.example.yinyang_taengkwa.api.RetrofitClient;
 import com.example.yinyang_taengkwa.models.DefaultResponse;
+import com.example.yinyang_taengkwa.models.User;
 
 import java.util.ArrayList;
 
@@ -34,16 +36,24 @@ public class Question extends AppCompatActivity implements View.OnClickListener 
     Button button_back_login;
     RadioButton radioButton;
     RadioGroup radioGroup;
-    RetrofitClient retro ;
+    RetrofitClient retro;
     String email;
     TextView textView_numberques;
+    String text;
     private SharedPreferences sp;
     private String PREF_NAME = "Log in";
 
+    private SharedPreferences answerPref;
+    private SharedPreferences.Editor editor;
+
     private int Score[];
+    private int Score2[];
+    int check = 0;
+    int answer = 0;
+
     int yhin;
     int yhang;
-    double sum_yhin  =0;
+    double sum_yhin = 0;
     double sum_yhang = 0;
     int index = 1;
     double max = Double.MIN_VALUE;
@@ -55,6 +65,8 @@ public class Question extends AppCompatActivity implements View.OnClickListener 
         getSupportActionBar().hide();
 
         sp = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        answerPref = getSharedPreferences("Answer", MODE_PRIVATE);
+        editor = answerPref.edit();
 
         Text_question = findViewById(R.id.Text_question);
         textView_numberques = findViewById(R.id.textview_numberques);
@@ -76,24 +88,39 @@ public class Question extends AppCompatActivity implements View.OnClickListener 
         radioGroup = findViewById(R.id.radio_answer);
         retro = new RetrofitClient();
 
+//        index = getIntent().getIntExtra("position_ques", 1);
+
+
+        int index = 0;
+        if ((index = getIntent().getIntExtra("position_ques", -1)) != -1) {
+            Toast.makeText(this, String.valueOf(index), Toast.LENGTH_SHORT).show();
+            setQuestionByIndex(index);
+
+            int answer = answerPref.getInt(String.valueOf(index), 0);
+            setAnswer(answer);
+        } else {
+            setFirstQuestion();
+        }
+
         setQuestion();
 
-         email    = sp.getString("email", "");
+
+        email = sp.getString("email", "");
     }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.button_previous_question:
                 backQuestion();
                 break;
             case R.id.button_next_question:
                 nextQuestion();
                 break;
-            case R.id.button_confirmall :
+            case R.id.button_confirmall:
                 confirmAll();
                 break;
-            case R.id.button_back_login :
+            case R.id.button_back_login:
                 Intent intent = new Intent(Question.this, LoginActivity.class);
                 startActivity(intent);
         }
@@ -104,7 +131,7 @@ public class Question extends AppCompatActivity implements View.OnClickListener 
             index--;
 
         Text_question.setText(index + ". " + questionArray.get(index));
-        textView_numberques.setText(index+"/"+"21");
+        textView_numberques.setText(index + "/" + "21");
 
         setAnswer(Score[index]);
 
@@ -120,12 +147,14 @@ public class Question extends AppCompatActivity implements View.OnClickListener 
             index++;
 
         Text_question.setText(index + ". " + questionArray.get(index));
-        textView_numberques.setText(index+"/"+"21");
+        textView_numberques.setText(index + "/" + "21");
 
         int score = Score[index];
+
         if (index == questionArray.size() - 1) {
             if (score > 0) {
                 setAnswer(score);
+
                 setButton(4);
             } else {
                 setButton(3);
@@ -134,6 +163,8 @@ public class Question extends AppCompatActivity implements View.OnClickListener 
         } else {
             if (score > 0) {
                 setAnswer(score);
+
+
                 setButton(2);
             } else {
                 setButton(1);
@@ -218,8 +249,10 @@ public class Question extends AppCompatActivity implements View.OnClickListener 
 //        Toast.makeText(this, String.valueOf(radioId), Toast.LENGTH_SHORT).show();
 
         Score[index] = getScore(radioId);
-        radioButton = findViewById(radioId);
+        editor.putInt(String.valueOf(index), getScore(radioId));
+        editor.commit();
 
+        radioButton = findViewById(radioId);
 
 
 //        int score = Integer.parseInt(radioButton.getText().toString());
@@ -228,28 +261,27 @@ public class Question extends AppCompatActivity implements View.OnClickListener 
 
         if (index == questionArray.size() - 1) {
             button_confirmall.setEnabled(true);
-        }
-        else {
+        } else {
             button_next.setEnabled(true);
         }
-
 //        Toast.makeText(this, Integer.toString(score), Toast.LENGTH_SHORT).show();
 
     }
 
     private int getScore(int radioId) {
         switch (radioId) {
-            case R.id.radioButton1 :
+            case R.id.radioButton1:
                 return 1;
-            case R.id.radioButton2 :
+            case R.id.radioButton2:
                 return 2;
-            case R.id.radioButton3 :
+            case R.id.radioButton3:
                 return 3;
-            case R.id.radioButton4 :
+            case R.id.radioButton4:
                 return 4;
-            case R.id.radioButton5 :
+            case R.id.radioButton5:
                 return 5;
-                default: return 0;
+            default:
+                return 0;
         }
     }
 
@@ -257,68 +289,92 @@ public class Question extends AppCompatActivity implements View.OnClickListener 
     public void setQuestion() {
         questionArray = new ArrayList<>();
         questionArray.add("");
-        questionArray.add("คุณมีอาการหน้าซีดบ่อยแค่ไหน ?");
-        questionArray.add("คุณหายใจเบาบ่อยแค่ไหน ?");
-        questionArray.add("คุณขี้หนาวบ่อยแค่ไหน ?");
-        questionArray.add("คุณรู้สึกไม่ค่อยมีแรงบ่อยแค่ไหน ?");
-        questionArray.add("คุณอุจจาระน้อยและค่อนข้างเหลวบ่อยแค่ไหน ?");
-        questionArray.add("คุณปัสสาวะมากบ่อยแค่ไหน ?");
-        questionArray.add("คุณรู้สึกท้องอืดบ่อยแค่ไหน  ?");
-        questionArray.add("คุณร้อนในบ่อยแค่ไหน ?");
-        questionArray.add("คุณปากแห้งบ่อยแค่ไหน ?");
-        questionArray.add("คุณคอแห้งบ่อยแค่ไหน ?");
-        questionArray.add("คุณข้ีหงุดหงิดบ่อยแค่ไหน ?");
-        questionArray.add("คุณผิวแห้งบ่อยแค่ไหน ?");
-        questionArray.add("คุณฝ่ามือและฝ่าเท้าร้อนบ่อยแค่ไหน ?");
+        questionArray.add("คุณมีอาการหน้าซีดมั้ย ?");
+        questionArray.add("คุณหายใจเบามั้ย?");
+        questionArray.add("คุณขี้หนาวบ่อยมั้ย ?");
+        questionArray.add("คุณรู้สึกไม่ค่อยมีแรง บ่อยมั้ย ?");
+        questionArray.add("คุณอุจจาระน้อยและค่อนข้างเหลว บ่อยมั้ย ?");
+        questionArray.add("คุณปัสสาวะมาก บ่อยมั้ย ?");
+        questionArray.add("คุณรู้สึกท้องอืด บ่อยมั้ย  ?");
+        questionArray.add("คุณร้อนใน บ่อยมั้ย ?");
+        questionArray.add("คุณปากแห้ง บ่อยมั้ย ?");
+        questionArray.add("คุณคอแห้ง บ่อยมั้ย ?");
+        questionArray.add("คุณข้ีหงุดหงิด บ่อยมั้ย ?");
+        questionArray.add("คุณผิวแห้ง บ่อยมั้ย ?");
+        questionArray.add("ฝ่ามือและฝ่าเท้าของคุณร้อน บ่อยมั้ย ?");
 
         //yhang
-        questionArray.add("คุณหน้าแดงบ่อยแค่ไหน ?");
-        questionArray.add("คุณหายใจแรงบ่อยแค่ไหน ?");
-        questionArray.add("คุณรู้สึกตัวร้อนบ่อยแค่ไหน ?");
-        questionArray.add("คุณชอบด่ืมนํ้าเย็นบ่อยแค่ไหน ?");
-        questionArray.add("คุณท้องผูกบ่อยแค่ไหน ?");
-        questionArray.add("คุณปัสสาวะเหลืองเข้มบ่อยแค่ไหน ?");
-        questionArray.add("ฝ่ามือและฝ่าเท้าของคุณเย็นง่ายบ่อยแค่ไหน ?");
-        questionArray.add("คุณปัสสาวะตอนกลางคืนบ่อยแค่ไหน ?");
+        questionArray.add("คุณมีอาการหน้าแดงมั้ย ?");
+        questionArray.add("คุณหายใจแรงมั้ย ?");
+        questionArray.add("คุณรู้สึกตัวร้อน บ่อยมั้ย ?");
+        questionArray.add("คุณชอบด่ืมนํ้าเย็น บ่อยมั้ย ?");
+        questionArray.add("คุณท้องผูก บ่อยมั้ย ?");
+        questionArray.add("คุณปัสสาวะเหลืองเข้ม บ่อยมั้ย ?");
+        questionArray.add("ฝ่ามือและฝ่าเท้าของคุณเย็น บ่อยมั้ย ?");
+        questionArray.add("คุณปัสสาวะตอนกลางคืน บ่อยมั้ย ?");
 
         Score = new int[questionArray.size()];
+    }
+
+    private void setFirstQuestion() {
+        setQuestion();
 
         Text_question.setText(index + ". " + questionArray.get(1));
-        textView_numberques.setText(index+"/"+"21");
+        textView_numberques.setText(index + "/" + "21");
         button_previous.setVisibility(View.GONE);
         button_confirmall.setVisibility(View.GONE);
     }
 
+    private void setQuestionByIndex(int index) {
+        setQuestion();
+
+        this.index = index;
+
+        Text_question.setText(index + ". " + questionArray.get(index));
+        textView_numberques.setText(index + "/" + "21");
+        button_previous.setVisibility(View.GONE);
+        button_next.setVisibility(View.GONE);
+        button_confirmall.setVisibility(View.VISIBLE);
+    }
+
     private void confirmAll() {
+
 
         CalculateNumyhinyhang();
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(Question.this, R.style.AlertDialogCustom);
 
-       //เหลือกรณีเท่ากับจะให้เป็นตามที่คำนวณวันเกิดเลย
+        //เหลือกรณีเท่ากับจะให้เป็นตามที่คำนวณวันเกิดเลย
         int c = 0;
-        if (sum_yhin > sum_yhang){
+        if (sum_yhin > sum_yhang) {
             max = sum_yhin;
-            c=1;
-        }else if (sum_yhang > sum_yhin) {
+            c = 1;
+        } else if (sum_yhang > sum_yhin) {
             max = sum_yhang;
-            c=2;
+            c = 2;
+        } else {
+            max = sum_yhin;
+            c = 3;
         }
 
 
-        String s1 = String.format("%.2f",sum_yhin);
-        String s2 = String.format("%.2f",sum_yhang);
+        final String s1 = String.format("%.2f", sum_yhin);
+        final String s2 = String.format("%.2f", sum_yhang);
+
 
         builder.setTitle("ระดับคะแนน");
-        if (c==1) {
+        if (c == 1) {
             //set message
-            builder.setMessage("หยินของคุณคือ " + s1 + "\nหยางของคุณคือ " + s2+"\n\nร่างกายของคุณมีความเป็นหยินมากกว่า");
+            builder.setMessage("หยินของคุณคือ " + s1 + "\nหยางของคุณคือ " + s2);
             builder.setIcon(R.drawable.ic_yin);
-        }
-        else if (c==2){
-            builder.setMessage("หยินของคุณคือ " + s1 + "\nหยางของคุณคือ " + s2+"\n\nร่างกายของคุณมีความเป็นหยางมากกว่า");
+        } else if (c == 2) {
+            builder.setMessage("หยินของคุณคือ " + s1 + "\nหยางของคุณคือ " + s2);
             builder.setIcon(R.drawable.ic_yang);
+        } else {
+//            text = getIntent().getExtras().getString("yhinyhang");
+            builder.setMessage("หยินของคุณคือ " + s1 + "\nหยางของคุณคือ " + s2);
+
         }
 
         //set cancelable
@@ -328,9 +384,30 @@ public class Question extends AppCompatActivity implements View.OnClickListener 
         builder.setPositiveButton("ตกลง", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(Question.this, MainActivity.class);
-                startActivity(intent);
+                Call<DefaultResponse> call = retro.getApi().updateYhinYhang(sum_yhin, sum_yhang, email);
+                call.enqueue(new Callback<DefaultResponse>() {
+                    @Override
+                    public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
+                        DefaultResponse res = response.body();
 
+                        if (res.isStatus()) {
+                            SharedPreferences sp = getSharedPreferences("Log in", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sp.edit();
+
+                            editor.putString("numYhin", s1);
+                            editor.putString("numYhang", s2);
+                            editor.commit();
+
+                            Intent intent = new Intent(Question.this, MainActivity.class);
+                            startActivity(intent);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<DefaultResponse> call, Throwable t) {
+
+                    }
+                });
             }
         });
 
@@ -338,38 +415,22 @@ public class Question extends AppCompatActivity implements View.OnClickListener 
         AlertDialog alertdialog = builder.create();
         //show alert dialog
         alertdialog.show();
-
-        Call<DefaultResponse> call = retro.getApi().updateYhinYhang(sum_yhin,sum_yhang,email);
-        call.enqueue(new Callback<DefaultResponse>() {
-            @Override
-            public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
-                DefaultResponse res = response.body();
-            }
-
-            @Override
-            public void onFailure(Call<DefaultResponse> call, Throwable t) {
-
-            }
-        });
-
     }
 
-    public void CalculateNumyhinyhang(){
 
-        for(int i = 1; i<=Score.length; i++){
+    public void CalculateNumyhinyhang() {
 
-            if(i>=1 && i<=13 ){
+        for (int i = 1; i <= Score.length; i++) {
+
+            if (i >= 1 && i <= 13) {
                 sum_yhin += Score[i];
-            }
-            else if (i>=14 && i<=21) {
+            } else if (i >= 14 && i <= 21) {
                 sum_yhang += Score[i];
             }
         }
 
-        sum_yhin = sum_yhin/13;
-        sum_yhang = sum_yhang/8;
-
-
+        sum_yhin = sum_yhin / 13;
+        sum_yhang = sum_yhang / 8;
     }
 
 

@@ -87,7 +87,7 @@
                     android:onClick="checkButton"
                     android:fontFamily="@font/printable4u"
                     android:textSize="20dp"
-                    android:text="เป็นน้อย" />
+                    android:text="น้อย" />
 
                 <RadioButton
                     android:id="@+id/radioButton3"
@@ -96,7 +96,7 @@
                     android:onClick="checkButton"
                     android:fontFamily="@font/printable4u"
                     android:textSize="20dp"
-                    android:text="เป็นปานกลาง" />
+                    android:text="ปานกลาง" />
 
                 <RadioButton
                     android:id="@+id/radioButton4"
@@ -105,7 +105,7 @@
                     android:onClick="checkButton"
                     android:fontFamily="@font/printable4u"
                     android:textSize="20dp"
-                    android:text="เป็นบ่อย" />
+                    android:text="บ่อย" />
 
                 <RadioButton
                     android:id="@+id/radioButton5"
@@ -114,7 +114,7 @@
                     android:onClick="checkButton"
                     android:fontFamily="@font/printable4u"
                     android:textSize="20dp"
-                    android:text="เป็นตลอดเวลา" />
+                    android:text="ตลอดเวลา" />
 
             </RadioGroup>
 

@@ -212,10 +212,19 @@
                         android:drawableLeft="@drawable/ic_favorite_black_24dp"
                         android:fontFamily="@font/printable4u"
                         android:layout_gravity="center_horizontal"
-                        android:text="อาหารที่ฉันถูกใจ "
+                        android:text=" อาหารที่ฉันถูกใจ "
                         android:textSize="23dp" />
 
-
+                    <TextView
+                        android:id="@+id/choose_menu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:drawableLeft="@drawable/ic_checkmark"
+                        android:fontFamily="@font/printable4u"
+                        android:layout_gravity="center_horizontal"
+                        android:text=" อาหารที่ฉันกิน "
+                        android:textSize="23dp" />
 
                 </LinearLayout>
 
@@ -236,6 +245,31 @@
                         android:fontFamily="@font/printable4u"
                         android:gravity="center_horizontal"
                         android:text="แบบสอบถาม"
+                        android:textColor="#FFFF"
+                        android:textSize="23dp"
+                        android:textStyle="bold"
+
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_choosequestion"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/layout_Gotoquestion"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_black"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/printable4u"
+                        android:gravity="center_horizontal"
+                        android:text="เลือกแบบสอบถาม"
                         android:textColor="#FFFF"
                         android:textSize="23dp"
                         android:textStyle="bold"

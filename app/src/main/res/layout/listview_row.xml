@@ -63,14 +63,26 @@
             android:textColor="#000000"
             android:textSize="18dp" />
 
-                <ToggleButton
-                    android:id="@+id/favorite_toggle_button"
-                    android:layout_width="37dp"
-                    android:layout_height="37dp"
-                    android:layout_marginRight="20dp"
-                    android:textOff=""
-                    android:textOn=""
-                    android:background="@drawable/ic_favorite_border_black_24dp"/>
+
+        <ToggleButton
+            android:id="@+id/choose_menu"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="20dp"
+            android:textOff=""
+            android:textOn=""
+            android:background="@drawable/checkmark_choose">
+
+        </ToggleButton>
+
+        <ToggleButton
+            android:id="@+id/favorite_toggle_button"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginRight="20dp"
+            android:textOff=""
+            android:textOn=""
+            android:background="@drawable/ic_favorite_border_black_24dp"/>
 
     </LinearLayout>
 
@@ -78,7 +90,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginTop="15dp"
+        >
 
 
         <TextView
@@ -138,132 +152,6 @@
 
 
     </LinearLayout>
-
-
-<!--    <ImageView-->
-<!--        android:id="@+id/imageView1"-->
-<!--        android:layout_width="95dp"-->
-<!--        android:layout_height="80dp"-->
-<!--        android:layout_margin="10dp"-->
-<!--        android:scaleType="centerCrop" />-->
-<!--    &lt;!&ndash;android:background="@drawable/user1" />&ndash;&gt;-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/name_menu_textview"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginRight="8dp"-->
-<!--        android:layout_toRightOf="@+id/imageView1"-->
-<!--        android:fontFamily="@font/printable4u"-->
-<!--        android:text="ชื่อเมนูอาหาร"-->
-<!--        android:textColor="#000000"-->
-<!--        android:textSize="18dp" />-->
-
-<!--    <LinearLayout-->
-<!--        android:id="@+id/layout_cate"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_below="@+id/name_menu_textview"-->
-<!--        android:layout_toRightOf="@+id/imageView1">-->
-
-<!--        <ImageView-->
-<!--            android:id="@+id/img_category"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginRight="5dp"-->
-<!--            />-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/category_textview"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="8dp"-->
-<!--            android:layout_weight="1"-->
-<!--            android:fontFamily="@font/printable4u"-->
-<!--            android:text="ประเภท :"-->
-<!--            android:textColor="#000000"-->
-<!--            android:textSize="18dp" />-->
-
-
-<!--        <ToggleButton-->
-<!--            android:id="@+id/favorite_toggle_button"-->
-<!--            android:layout_width="37dp"-->
-<!--            android:layout_height="37dp"-->
-<!--            android:layout_marginRight="20dp"-->
-<!--            android:textOff=""-->
-<!--            android:textOn=""-->
-<!--            android:background="@drawable/ic_favorite_border_black_24dp"/>-->
-
-
-<!--    </LinearLayout>-->
-
-<!--    <LinearLayout-->
-<!--        android:id="@+id/layout_yhin"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_below="@+id/layout_cate"-->
-<!--        android:layout_toRightOf="@+id/imageView1">-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/num_yhin_textview2"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="8dp"-->
-<!--            android:fontFamily="@font/printable4u"-->
-<!--            android:text="ค่าหยิน"-->
-<!--            android:textColor="#000000"-->
-<!--            android:textSize="18dp" />-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/num_yhin_text_view"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginLeft="10dp"-->
-<!--            android:layout_marginTop="5dp"-->
-<!--            android:layout_marginRight="20dp"-->
-<!--            android:layout_marginBottom="5dp"-->
-<!--            android:layout_weight="1"-->
-<!--            android:fontFamily="@font/printable4u"-->
-<!--            android:textColor="#000000"-->
-<!--            android:textSize="18dp" />-->
-
-
-<!--        <TextView-->
-<!--            android:id="@+id/num_yhang_textview3"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:fontFamily="@font/printable4u"-->
-<!--            android:textColor="#000000"-->
-<!--            android:layout_marginTop="8dp"-->
-<!--            android:text="ค่าหยาง"-->
-<!--            android:textSize="18dp" />-->
-
-
-<!--        <TextView-->
-<!--            android:id="@+id/num_yhang_text_view"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginLeft="10dp"-->
-<!--            android:layout_marginTop="5dp"-->
-<!--            android:layout_marginRight="20dp"-->
-<!--            android:layout_marginBottom="5dp"-->
-<!--            android:layout_weight="1"-->
-<!--            android:fontFamily="@font/printable4u"-->
-<!--            android:textColor="#000000"-->
-<!--            android:textSize="18dp" />-->
-
-
-<!--    </LinearLayout>-->
-
-
-    <!--<ToggleButton-->
-    <!--android:id="@+id/favourite"-->
-    <!--android:layout_width="30dp"-->
-    <!--android:layout_height="30dp"-->
-    <!--android:background="@drawable/ic_favorite_border_black_24dp"-->
-    <!--android:textOff=""-->
-    <!--android:textOn=""-->
-
 
 
 </LinearLayout>

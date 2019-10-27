@@ -109,8 +109,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="10dp"
-            >
+            android:layout_marginTop="10dp">
 
             <TextView
                 android:layout_width="105dp"
@@ -123,8 +122,9 @@
                 android:fontFamily="@font/printable4u"
                 android:padding="10dp" />
 
-            <EditText
-                android:id="@+id/editTextFood"
+
+            <TextView
+                android:id="@+id/TextviewFood"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
@@ -135,6 +135,41 @@
                 android:drawableRight="@drawable/ic_drop_down_arrow"
                 android:textSize="18dp"
                 android:padding="10dp" />
+
+
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layout2"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_login_text"
+            android:orientation="horizontal"
+           >
+
+            <TextView
+                android:layout_width="105dp"
+                android:layout_height="match_parent"
+                android:background="#E7E7E7"
+                android:drawablePadding="5dp"
+                android:gravity="center_vertical"
+                android:textSize="18dp"
+                android:fontFamily="@font/printable4u"
+                android:padding="10dp" />
+
+            <com.skyhope.materialtagview.TagView_me
+                android:id="@+id/tagview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </com.skyhope.materialtagview.TagView_me>
+
         </LinearLayout>
 
     </LinearLayout>

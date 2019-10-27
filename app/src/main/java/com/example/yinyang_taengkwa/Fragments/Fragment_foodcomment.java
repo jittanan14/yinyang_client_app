@@ -77,10 +77,14 @@ public class Fragment_foodcomment extends Fragment {
 
                     if (menu.size() != 0) {
 
+                        List<String> foodLoseArray = new ArrayList<>();
+
                         final String numYhin = sp.getString("numYhin", "");
                         final String numYhang = sp.getString("numYhang", "");
                         final String body_user = sp.getString("body", "");
                         final String food_lose = sp.getString("foodLose", "");
+
+                        setFoodLose(foodLoseArray, food_lose);
 
                         for (int i = 0; i < menu.size(); i++) {
 
@@ -93,29 +97,28 @@ public class Fragment_foodcomment extends Fragment {
                             double disYang24;
                             double disYang26;
 
+                            double countYhin=0.0;
+                            double countYhang = 0.0;
+
 //                            menu.get(i).getIngredient_menu().indexOf(food_lose) == -1
 
-                            String[] foodLose = { "ปลา", "แฮม", "มะระ", "มะเขือ", "เนื้อ"};
+//                            String[] foodLose = { "ปลา", "แฮม", "มะระ", "มะเขือ", "เนื้อ"};
 
-                            if (!findFoodLose(menu.get(i), foodLose)) {
+                            if (!findFoodLose(menu.get(i), foodLoseArray)) {
                                 if (body_user.equals("หยิน")) {
 
                                     if (Double.parseDouble(numYhin) < 2.4 && (Double.parseDouble(numYhang) >= 2.4 && Double.parseDouble(numYhang) <= 2.6)) {
                                         //กินหยินเพิ่มขึ้นให้ถึง 2.5
                                         disYin24 = Math.abs(Double.parseDouble(String.format("%.2f", Double.parseDouble(numYhin) - 2.4)));
                                         disYin26 = Math.abs(Double.parseDouble(String.format("%.2f", Double.parseDouble(numYhin) - 2.6)));
-
                                         disYang24 = Math.abs(Double.parseDouble(String.format("%.2f", Double.parseDouble(numYhang) - 2.4)));
                                         disYang26 = Math.abs(Double.parseDouble(String.format("%.2f", Double.parseDouble(numYhang) - 2.6)));
 
                                         if ((yin >= disYin24 && yin <= disYin26) && (yang >= disYang26 && yang <= disYang24)) {
-                                            if (menu.get(i).getIngredient_menu().indexOf("ลูกชิ้นปลา") < 0) {
-//                                            menu_recommend.add(menu.get(i));
 
-                                                Log.e("Food Lose", String.valueOf(menu.get(i).getIngredient_menu().indexOf("ลูกชิ้นปลา")));
-                                            }
-
+                                            menu_recommend.add(menu.get(i));
                                         }
+
                                     } else if (Double.parseDouble(numYhin) < 2.4 || Double.parseDouble(numYhang) < 2.4) {
                                         //กินหยินและหยางให้ถึง 2.5 เมนูอาหารไม่มี
                                         disYin24 = Math.abs(Double.parseDouble(String.format("%.2f", Double.parseDouble(numYhin) - 2.4)));
@@ -138,7 +141,7 @@ public class Fragment_foodcomment extends Fragment {
                                         disYang26 = Math.abs(Double.parseDouble(String.format("%.2f", Double.parseDouble(numYhang) - 2.6)));
 
 
-                                        if ((yin >= disYin26 && yin <= disYin24) || (yang >= disYang26 && yang <= disYang24)) {
+                                        if ((yin >= disYin26 && yin <= disYin24) && (yang >= disYang26 && yang <= disYang24)) {
 
                                             menu_recommend.add(menu.get(i));
 
@@ -157,6 +160,21 @@ public class Fragment_foodcomment extends Fragment {
                                             menu_recommend.add(menu.get(i));
                                         }
                                     }
+
+//                                    if (Double.parseDouble(numYhang) > Double.parseDouble(numYhin) && (Double.parseDouble(numYhin)>= 2.4 && Double.parseDouble(numYhin)<= 2.6)){
+//                                        disYin24 = Math.abs(Double.parseDouble(String.format("%.2f", Double.parseDouble(numYhin) - 2.4)));
+//                                        disYin26 = Math.abs(Double.parseDouble(String.format("%.2f", Double.parseDouble(numYhin) - 2.6)));
+//
+//
+//                                        disYang24 = Math.abs(Double.parseDouble(String.format("%.2f", Double.parseDouble(numYhang) - 2.4)));
+//                                        disYang26 = Math.abs(Double.parseDouble(String.format("%.2f", Double.parseDouble(numYhang) - 2.6)));
+//
+//                                        if ((yin >= disYin26 && yin <= disYin24) && (yang >= disYang26 && yang <= disYang24)){
+//                                            menu_recommend.add(menu.get(i));
+//                                        }
+//
+//
+//                                    }
                                 } else if (body_user.equals("หยาง")) {
 
                                     if (Double.parseDouble(numYhang) > 2.6 && (Double.parseDouble(numYhin) >= 2.4 && Double.parseDouble(numYhin) <= 2.6)) {
@@ -166,6 +184,7 @@ public class Fragment_foodcomment extends Fragment {
 
                                         disYang24 = Math.abs(Double.parseDouble(String.format("%.2f", Double.parseDouble(numYhang) - 2.4)));
                                         disYang26 = Math.abs(Double.parseDouble(String.format("%.2f", Double.parseDouble(numYhang) - 2.6)));
+
 
                                         if ((yang >= disYang26 && yang <= disYang24) && (yin >= disYin26 && yin <= disYin24)) {
                                             menu_recommend.add(menu.get(i));
@@ -198,8 +217,20 @@ public class Fragment_foodcomment extends Fragment {
 
                                         }
 
-                                    } else if (Double.parseDouble(numYhang) < 2.5 && Double.parseDouble(numYhin) == 2.5) {
+                                    } else if (Double.parseDouble(numYhang) < 2.4 && (Double.parseDouble(numYhang) >= 2.4 && Double.parseDouble(numYhang) <= 2.6)) {
                                         //กินหยางให้เพิ่มขึ้นเท่ากับ 2.5
+                                        disYin24 = Math.abs(Double.parseDouble(String.format("%.2f", Double.parseDouble(numYhin) - 2.4)));
+                                        disYin26 = Math.abs(Double.parseDouble(String.format("%.2f", Double.parseDouble(numYhin) - 2.6)));
+
+                                        disYang24 = Math.abs(Double.parseDouble(String.format("%.2f", Double.parseDouble(numYhang) - 2.4)));
+                                        disYang26 = Math.abs(Double.parseDouble(String.format("%.2f", Double.parseDouble(numYhang) - 2.6)));
+
+                                        if ((yin >= disYin26 && yin <= disYin24) && (yang >= disYang24 && yang <= disYang26)) {
+
+                                            menu_recommend.add(menu.get(i));
+
+                                        }
+
                                     }
                                 }
 
@@ -229,10 +260,14 @@ public class Fragment_foodcomment extends Fragment {
 
     }
 
-    private Boolean findFoodLose(Menu menu, String[] foodLose) {
+    private void setFoodLose(List<String> flArray, String flText) {
+        flArray.add(flText);
+    }
 
-        for(int i=0; i<foodLose.length; i++) {
-            if(menu.getIngredient_menu().indexOf(foodLose[i]) > 0)
+    private Boolean findFoodLose(Menu menu, List<String> foodLose) {
+
+        for(int i=0; i<foodLose.size(); i++) {
+            if(menu.getIngredient_menu().indexOf(foodLose.get(i)) > 0)
                 return true;
         }
         return false;

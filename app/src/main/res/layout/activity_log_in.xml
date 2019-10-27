@@ -43,7 +43,7 @@
             android:drawableLeft="@drawable/ic_email"
             android:drawablePadding="5dp"
             android:fontFamily="@font/printable4u"
-            android:hint="email"
+            android:hint="อีเมล"
             android:inputType="textEmailAddress" />
 
         <EditText
@@ -53,8 +53,9 @@
             android:drawableLeft="@drawable/ic_password"
             android:drawablePadding="5dp"
             android:fontFamily="@font/printable4u"
-            android:hint="password"
+            android:hint="รหัสผ่าน"
             android:inputType="textPassword" />
+
     </LinearLayout>
 
 
@@ -83,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/printable4u"
                 android:gravity="center"
-                android:text="Sign in"
+                android:text="เข้าสู่ระบบ"
                 android:textSize="50px"
                 android:textStyle="bold"
 
@@ -111,7 +112,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/printable4u"
                 android:gravity="center"
-                android:text="Sign up"
+                android:text="สมัครสมาชิก"
                 android:textSize="50px"
                 android:textStyle="bold"
 

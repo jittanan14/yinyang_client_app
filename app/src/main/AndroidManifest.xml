@@ -5,20 +5,20 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/yinyang"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.FavoriteActivity">
+        <activity android:name=".activities.ChooseActivity"></activity>
+        <activity android:name=".activities.FavoriteActivity"></activity>
+        <activity android:name=".activities.EditprofileActivity" />
+        <activity android:name=".Question_list" >
 
         </activity>
-        <activity android:name=".activities.EditprofileActivity" />
-        <activity android:name=".Question_list" />
         <activity android:name=".Question_layout" />
         <activity android:name=".activities.DetailActivity" />
         <activity android:name=".activities.RegisterActivity" />
@@ -31,9 +31,7 @@
         </activity>
         <activity android:name=".Question" />
         <activity android:name=".activities.LoginActivity" />
-        <activity android:name=".activities.MainActivity">
-
-        </activity>
+        <activity android:name=".activities.MainActivity"></activity>
     </application>
 
 </manifest>

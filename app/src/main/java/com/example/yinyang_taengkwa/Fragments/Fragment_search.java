@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -39,6 +40,8 @@ public class Fragment_search extends Fragment {
     ImageView imgView_search;
    MenuRecycleAdapter adapter;
     Menuresponse res;
+    Button bt_yin,bt_yang;
+
 
     public Fragment_search() {
         // Required empty public constructor
@@ -57,6 +60,8 @@ public class Fragment_search extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
 
         lst_view_search.setLayoutManager(linearLayoutManager);
+        bt_yin = view.findViewById(R.id.button_type_yin);
+        bt_yang = view.findViewById(R.id.button_type_yang);
 
 
         //Recycler View
@@ -86,10 +91,6 @@ public class Fragment_search extends Fragment {
             }
         });
 
-
-
-
-
         return view;
     }
 
@@ -117,7 +118,6 @@ public class Fragment_search extends Fragment {
                         adapter = new MenuRecycleAdapter(getContext(),res.getMenu());
                         lst_view_search.setAdapter(adapter);
 
-
                         adapter.setOnItemClickListener(new MenuRecycleAdapter.OnItemClickListener() {
                             @Override
                             public void onItemClick(com.example.yinyang_taengkwa.models.Menu item) {
@@ -136,6 +136,8 @@ public class Fragment_search extends Fragment {
             }
         });
     }
+
+
 
     public void filter(String data){
         ArrayList<com.example.yinyang_taengkwa.models.Menu> arr = new ArrayList<>();

@@ -63,7 +63,7 @@
 
 
             <Button
-                android:id="@+id/button_type"
+                android:id="@+id/button_type_yin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_button_yin"
@@ -77,6 +77,7 @@
             </Button>
 
             <Button
+                android:id="@+id/button_type_yang"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/layout1"
