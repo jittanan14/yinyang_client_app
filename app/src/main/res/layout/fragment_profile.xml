@@ -23,7 +23,7 @@
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp">
 
-                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/user_profile"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
@@ -102,7 +102,6 @@
                         android:text="  วัตถุดิบอาหารที่แพ้ :"
                         android:textSize="18dp" />
 
-
                 </LinearLayout>
 
                 <LinearLayout
@@ -124,12 +123,9 @@
                         android:text="แก้ไขข้อมูลส่วนตัว"
                         android:textColor="#FFFF"
                         android:textSize="23dp"
-                        android:textStyle="bold"
-
-                        />
+                        android:textStyle="bold" />
 
                 </LinearLayout>
-
 
                 <LinearLayout
                     android:id="@+id/layout_dataprofile3"
@@ -208,10 +204,10 @@
                         android:id="@+id/favourite"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
                         android:layout_marginTop="10dp"
                         android:drawableLeft="@drawable/ic_favorite_black_24dp"
                         android:fontFamily="@font/printable4u"
-                        android:layout_gravity="center_horizontal"
                         android:text=" อาหารที่ฉันถูกใจ "
                         android:textSize="23dp" />
 
@@ -219,10 +215,10 @@
                         android:id="@+id/choose_menu"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
                         android:layout_marginTop="10dp"
                         android:drawableLeft="@drawable/ic_checkmark"
                         android:fontFamily="@font/printable4u"
-                        android:layout_gravity="center_horizontal"
                         android:text=" อาหารที่ฉันกิน "
                         android:textSize="23dp" />
 
@@ -247,9 +243,7 @@
                         android:text="แบบสอบถาม"
                         android:textColor="#FFFF"
                         android:textSize="23dp"
-                        android:textStyle="bold"
-
-                        />
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
@@ -281,6 +275,8 @@
             </LinearLayout>
 
         </ScrollView>
+
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 </FrameLayout>
 

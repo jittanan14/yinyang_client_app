@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -23,10 +24,13 @@ import com.example.yinyang_taengkwa.models.DefaultResponse;
 import com.skyhope.materialtagview.TagView_me;
 import com.skyhope.materialtagview.model.TagModel;
 import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -93,7 +97,7 @@ public class EditprofileActivity extends AppCompatActivity {
 
 
         if (image.isEmpty()) {
-            CircleImageViewProfile.setImageResource(R.drawable.ic_user);
+           CircleImageViewProfile.setImageResource(R.drawable.ic_user);
         } else {
 
             Picasso.get().load(url.concat(image)).into(CircleImageViewProfile);
@@ -110,6 +114,7 @@ public class EditprofileActivity extends AppCompatActivity {
                 builder.setCancelable(true);
                 //set positive / yes button
 
+
                 builder.setPositiveButton("ตกลง", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -119,16 +124,19 @@ public class EditprofileActivity extends AppCompatActivity {
                         final String food = Text_food.getText().toString().trim();
 
 
-                        if (image_user.isEmpty()) {
-                            image_user = image;
-                        }
+
 
                         List<TagModel> foodd = tagview.getSelectedTags();
 
                         for (int i = 0; i < foodd.size(); i++) {
                             textfood += foodd.get(i).getTagText() + ",";
+
                         }
 
+                        if(image_user.isEmpty()){
+                            image_user = imageToString(((BitmapDrawable) CircleImageViewProfile.getDrawable()).getBitmap());
+
+                        }
 
                         Call<DefaultResponse> call = RetrofitClient.getInstance().getApi().updateProfile(email, image_user, username2, textfood);
                         call.enqueue(new Callback<DefaultResponse>() {
@@ -185,8 +193,11 @@ public class EditprofileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(Intent.createChooser(intent, "Select Image from Gallery"), SELECT_IMAGE);
+                CropImage.activity()
+                        .setGuidelines(CropImageView.Guidelines.ON)
+                        .setAspectRatio(1, 1)
+                        .start(EditprofileActivity.this);
+
             }
         });
 
@@ -218,38 +229,24 @@ public class EditprofileActivity extends AppCompatActivity {
         return Base64.encodeToString(imgByte, Base64.DEFAULT);
     }
 
-
-    private void CropImage(Uri uri) {
-        try {
-            Intent CropIntent = new Intent("com.android.camera.action.CROP");
-            CropIntent.setDataAndType(uri, "image/*");
-            CropIntent.putExtra("crop", "true");
-            CropIntent.putExtra("outputX", 180);
-            CropIntent.putExtra("outputY", 180);
-            CropIntent.putExtra("aspectX", 4);
-            CropIntent.putExtra("aspectY", 4);
-            CropIntent.putExtra("scaleUpIfNeeded", true);
-            CropIntent.putExtra("return-data", true);
-            startActivityForResult(CropIntent, CROP_IMAGE);
-        } catch (ActivityNotFoundException ex) {
-        }
-    }
-
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == SELECT_IMAGE) {
-                if (data != null) {
-                    CropImage(data.getData());
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Uri resultUri = result.getUri();
+
+                Bitmap bitmap = null;
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
+                    image_user = imageToString(bitmap);
+                    CircleImageViewProfile.setImageBitmap(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            } else if (requestCode == CROP_IMAGE) {
-                Bundle bundle = data.getExtras();
-                Bitmap bitmap = bundle.getParcelable("data");
-                image_user = imageToString(bitmap);
-                CircleImageViewProfile.setImageBitmap(bitmap);
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
             }
-        } else if (resultCode == Activity.RESULT_CANCELED) {
-            Toast.makeText(EditprofileActivity.this, "Canceled", Toast.LENGTH_SHORT).show();
         }
     }
 

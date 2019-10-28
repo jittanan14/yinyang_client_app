@@ -3,6 +3,7 @@ package com.example.yinyang_taengkwa.api;
 
 import com.example.yinyang_taengkwa.models.DefaultResponse;
 import com.example.yinyang_taengkwa.models.LoginResponse;
+import com.example.yinyang_taengkwa.models.MenuUserResponse;
 import com.example.yinyang_taengkwa.models.Menuresponse;
 import com.example.yinyang_taengkwa.models.User;
 
@@ -85,5 +86,27 @@ public interface Api {
     @GET("getmenu.php")
     Call<Menuresponse> getmenu();
 
+    @FormUrlEncoded
+    @POST("create_menu_user.php")
+    Call<DefaultResponse> createMenuUser(
+            @Field("user_id") String user_id,
+            @Field("date") String date,
+            @Field("menu_id") String menu_id
+    );
+
+    @FormUrlEncoded
+    @POST("update_menu_user.php")
+    Call<DefaultResponse> updateMenuUser (
+            @Field("user_id") String user_id,
+            @Field("menu_id") String menu_id
+    );
+
+
+    @FormUrlEncoded
+    @POST("getmenu_user.php")
+    Call<MenuUserResponse> getMenuUser(
+            @Field("user_id") String user_id
+
+    );
 
 }

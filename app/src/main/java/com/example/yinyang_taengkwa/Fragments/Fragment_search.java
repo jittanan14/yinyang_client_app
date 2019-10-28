@@ -1,19 +1,27 @@
 package com.example.yinyang_taengkwa.Fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
+
 
 import com.example.yinyang_taengkwa.Adapter.MenuRecycleAdapter;
 import com.example.yinyang_taengkwa.Adapter.SearchAdapter;
@@ -21,7 +29,10 @@ import com.example.yinyang_taengkwa.R;
 import com.example.yinyang_taengkwa.activities.DetailActivity;
 import com.example.yinyang_taengkwa.api.RetrofitClient;
 import com.example.yinyang_taengkwa.models.Menuresponse;
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
+
 import java.util.ArrayList;
+
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,18 +40,21 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.content.Context.INPUT_METHOD_SERVICE;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class Fragment_search extends Fragment {
 
-    RecyclerView lst_view_search;
+    ListView lst_view_search;
     EditText editText_search;
     ImageView imgView_search;
-   MenuRecycleAdapter adapter;
+    SearchAdapter adapter;
     Menuresponse res;
-    Button bt_yin,bt_yang;
+    TextView sort;
+    Button bt_yin, bt_yang;
 
 
     public Fragment_search() {
@@ -51,28 +65,49 @@ public class Fragment_search extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_search, container, false);
+        final View view = inflater.inflate(R.layout.fragment_search, container, false);
 
-        //Recycler View
+        // Recycler View
         lst_view_search = view.findViewById(R.id.lstView);
-        lst_view_search.setHasFixedSize(true);
+
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
 
-        lst_view_search.setLayoutManager(linearLayoutManager);
-        bt_yin = view.findViewById(R.id.button_type_yin);
-        bt_yang = view.findViewById(R.id.button_type_yang);
 
-
-        //Recycler View
+        // Recycler View
 
 
         lst_view_search = view.findViewById(R.id.lstView);
         editText_search = view.findViewById(R.id.editText_search);
-        imgView_search = view.findViewById(R.id.imgView_serch);
+        imgView_search = view.findViewById(R.id.imgView_search);
+        sort = view.findViewById(R.id.Textview_sort);
 
         initSearch(view);
         setHasOptionsMenu(true);
+
+        imgView_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                filter(editText_search.getText().toString());
+
+            }
+        });
+
+        editText_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
+                if (actionId == event.KEYCODE_ENTER) {
+                    InputMethodManager imm = (InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(editText_search.getWindowToken(), 0);
+                }
+
+                filter(editText_search.getText().toString());
+                return false;
+            }
+        });
+
 
         editText_search.addTextChangedListener(new TextWatcher() {
             @Override
@@ -87,7 +122,19 @@ public class Fragment_search extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                   filter(editable.toString());
+
+            }
+        });
+
+
+        lst_view_search.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                                Intent intent = new Intent(getContext(), DetailActivity.class);
+//                                intent.putExtra("DETAIL", i);
+//                                startActivity(intent);
+                Toast.makeText(getContext(), "EiEi", Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -112,20 +159,12 @@ public class Fragment_search extends Fragment {
             public void onResponse(Call<Menuresponse> call, Response<Menuresponse> response) {
                 res = response.body();
 
-                if(res.isStatus() == true) {
-                    if(res.getMenu() != null) {
+                if (res.isStatus() == true) {
+                    if (res.getMenu() != null) {
 
-                        adapter = new MenuRecycleAdapter(getContext(),res.getMenu());
+                        adapter = new SearchAdapter(getContext(), R.layout.listview_row_search, res.getMenu());
+
                         lst_view_search.setAdapter(adapter);
-
-                        adapter.setOnItemClickListener(new MenuRecycleAdapter.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(com.example.yinyang_taengkwa.models.Menu item) {
-                                Intent intent = new Intent(getContext(), DetailActivity.class);
-                                intent.putExtra("DETAIL", item);
-                                startActivity(intent);
-                            }
-                        });
                     }
                 }
             }
@@ -138,23 +177,22 @@ public class Fragment_search extends Fragment {
     }
 
 
-
-    public void filter(String data){
+    public void filter(String data) {
         ArrayList<com.example.yinyang_taengkwa.models.Menu> arr = new ArrayList<>();
 
-        for(com.example.yinyang_taengkwa.models.Menu menu : res.getMenu()){
-            if(menu.getName_menu().contains(data)){
+        for (com.example.yinyang_taengkwa.models.Menu menu : res.getMenu()) {
+            if (menu.getName_menu().contains(data)) {
                 arr.add(menu);
             }
         }
 
-        if(arr.size() > 0){
+        if (arr.size() > 0) {
             adapter.filterList(arr);
-        }
-        else {
+        } else {
             adapter.filterList((ArrayList) null);
-            Toast.makeText(getContext(),"ไม่พบรายการ",Toast.LENGTH_SHORT);
+            Toast.makeText(getContext(), "ไม่พบรายการ", Toast.LENGTH_SHORT);
         }
 
     }
+
 }

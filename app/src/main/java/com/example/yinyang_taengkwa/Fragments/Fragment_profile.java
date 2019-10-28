@@ -118,8 +118,8 @@ public class Fragment_profile extends Fragment {
 
 
 //        image = "5d51cd67d28ae.jpg";
-        if (image.isEmpty()) {
-            userProfile.setImageResource(R.drawable.user);
+        if (image.isEmpty() || image == null) {
+            userProfile.setImageResource(R.drawable.ic_user);
         } else {
             String url1 = url.concat(image);
             Picasso.get().load(url1).into(userProfile);
@@ -175,6 +175,7 @@ public class Fragment_profile extends Fragment {
         editData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                refreshData();
                 Intent intent = new Intent(getContext(), EditprofileActivity.class);
                 intent.putExtra("image", image);
                 intent.putExtra("username", username);
@@ -241,14 +242,13 @@ public class Fragment_profile extends Fragment {
         });
 
 
-
         return view;
 
 
     }
 
 
-    public void refreshData(){
+    public void refreshData() {
 
         final String email = sp.getString("email", "");
 

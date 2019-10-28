@@ -34,8 +34,11 @@ import com.example.yinyang_taengkwa.models.DefaultResponse;
 import com.google.android.material.textfield.TextInputLayout;
 import com.skyhope.materialtagview.TagView_me;
 import com.skyhope.materialtagview.model.TagModel;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -160,8 +163,10 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         pic_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(Intent.createChooser(intent, "Select Image from Gallery"), SELECT_IMAGE);
+                CropImage.activity()
+                        .setGuidelines(CropImageView.Guidelines.ON)
+                        .setAspectRatio(1, 1)
+                        .start(RegisterActivity.this);
             }
         });
         back_login.setOnClickListener(new View.OnClickListener() {
@@ -665,38 +670,24 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == SELECT_IMAGE) {
-                if (data != null) {
-                    CropImage(data.getData());
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Uri resultUri = result.getUri();
+
+                Bitmap bitmap = null;
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
+                    image_user = imageToString(bitmap);
+                    CircleImageViewProfile.setImageBitmap(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            } else if (requestCode == CROP_IMAGE) {
-                Bundle bundle = data.getExtras();
-                Bitmap bitmap = bundle.getParcelable("data");
-                image_user = imageToString(bitmap);
-                CircleImageViewProfile.setImageBitmap(bitmap);
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
             }
-        } else if (resultCode == Activity.RESULT_CANCELED) {
-            Toast.makeText(RegisterActivity.this, "Canceled", Toast.LENGTH_SHORT).show();
         }
     }
-
-    private void CropImage(Uri uri) {
-        try {
-            Intent CropIntent = new Intent("com.android.camera.action.CROP");
-            CropIntent.setDataAndType(uri, "image/*");
-            CropIntent.putExtra("crop", "true");
-            CropIntent.putExtra("outputX", 180);
-            CropIntent.putExtra("outputY", 180);
-            CropIntent.putExtra("aspectX", 4);
-            CropIntent.putExtra("aspectY", 4);
-            CropIntent.putExtra("scaleUpIfNeeded", true);
-            CropIntent.putExtra("return-data", true);
-            startActivityForResult(CropIntent, CROP_IMAGE);
-        } catch (ActivityNotFoundException ex) {
-        }
-    }
-
 
     private void userSignUp() {
         //System.out.println("รูป : " + image_user);

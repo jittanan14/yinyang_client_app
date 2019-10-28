@@ -45,4 +45,5 @@ dependencies {
 
     implementation project(':materialtagview-me')
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    api 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
 }

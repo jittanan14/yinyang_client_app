@@ -1,6 +1,8 @@
 package com.example.yinyang_taengkwa.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,14 +12,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
 import com.example.yinyang_taengkwa.Fragments.Fragment_foodcomment;
 import com.example.yinyang_taengkwa.R;
 import com.example.yinyang_taengkwa.api.RetrofitClient;
 import com.example.yinyang_taengkwa.models.DefaultResponse;
 import com.example.yinyang_taengkwa.models.Menu;
+import com.example.yinyang_taengkwa.models.MenuUser;
+import com.example.yinyang_taengkwa.models.MenuUserResponse;
+import com.example.yinyang_taengkwa.models.User;
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -30,6 +38,8 @@ public class MenuRecycleAdapter extends RecyclerView.Adapter<MenuRecycleAdapter.
 
     private Context mContext;
     private List<Menu> mMenuList;
+    SharedPreferences sp;
+    Calendar calendar;
 
     private String url = "http://pilot.cp.su.ac.th/usr/u07580536/yhinyhang/images/menu/";
 
@@ -107,7 +117,8 @@ public class MenuRecycleAdapter extends RecyclerView.Adapter<MenuRecycleAdapter.
             img_cate = itemView.findViewById(R.id.img_category);
             favoriteToggle = itemView.findViewById(R.id.favorite_toggle_button);
             chooseCheck = itemView.findViewById(R.id.choose_menu);
-
+            sp = mContext.getSharedPreferences("Log in", Context.MODE_PRIVATE);
+            calendar = Calendar.getInstance();
         }
 
         public void bind(final Menu item, final OnItemClickListener listener) {
@@ -118,6 +129,7 @@ public class MenuRecycleAdapter extends RecyclerView.Adapter<MenuRecycleAdapter.
                 }
             });
         }
+
         public void setFavoriteToggle() {
             if (menu.getFavorite() == 0) {
                 favoriteToggle.setChecked(false);
@@ -195,23 +207,83 @@ public class MenuRecycleAdapter extends RecyclerView.Adapter<MenuRecycleAdapter.
                         chooseCheck.setBackgroundResource(R.drawable.checkmark2);
                         menu.setChoose(1);
 
-                        Call<DefaultResponse> call = RetrofitClient.getInstance().getApi().updateChoose(menu.getName_menu(), 1);
-                        call.enqueue(new Callback<DefaultResponse>() {
+                        Log.e("Toggle", String.valueOf(chooseCheck.isChecked()));
+
+                        Call<DefaultResponse> call1 = RetrofitClient.getInstance().getApi().updateChoose(menu.getName_menu(), 1);
+                        call1.enqueue(new Callback<DefaultResponse>() {
                             @Override
-                            public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
+                            public void onResponse(Call<DefaultResponse> call1, Response<DefaultResponse> response) {
                                 DefaultResponse res = response.body();
 
                             }
 
                             @Override
-                            public void onFailure(Call<DefaultResponse> call, Throwable t) {
-
+                            public void onFailure(Call<DefaultResponse> call1, Throwable t) {
+                                Log.e("set 1", t.getMessage());
                             }
                         });
+
+
+                        final String user_id = sp.getString("email", "");
+                        final String date = DateFormat.getDateInstance().format(calendar.getTime());
+                        final String[] menu_id = {menu.getName_menu()};
+
+
+                        Call<MenuUserResponse> call2 = RetrofitClient.getInstance().getApi().getMenuUser(user_id);
+                        call2.enqueue(new Callback<MenuUserResponse>() {
+                            @Override
+                            public void onResponse(Call<MenuUserResponse> call2, Response<MenuUserResponse> response) {
+                                MenuUserResponse res = response.body();
+                                List<MenuUser> menuUserList = res.getMenuUser();
+
+                                if(!res.isStatus()) {
+                                    Call<DefaultResponse> call = RetrofitClient.getInstance().getApi().createMenuUser(user_id, date, menu_id[0]);
+                                    call.enqueue(new Callback<DefaultResponse>() {
+                                        @Override
+                                        public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
+
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<DefaultResponse> call, Throwable t) {
+                                            Log.e("Update Menu User", t.getMessage());
+                                        }
+                                    });
+                                } else {
+                                    Log.e("Get User", String.valueOf(res.isStatus()));
+
+                                    MenuUser mu;
+                                    if((mu = checkDate(menuUserList, date)) != null) {
+                                        menu_id[0] = mu.getMenu_id() + "," + menu_id[0];
+
+                                        Call<DefaultResponse> call = RetrofitClient.getInstance().getApi().updateMenuUser(user_id, menu_id[0]);
+                                        call.enqueue(new Callback<DefaultResponse>() {
+                                            @Override
+                                            public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
+
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<DefaultResponse> call, Throwable t) {
+                                                Log.e("Update Menu User", t.getMessage());
+                                            }
+                                        });
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<MenuUserResponse> call2, Throwable t) {
+                                Log.e("Get Menu User", t.getMessage());
+                            }
+                        });
+
 
                     } else {
                         chooseCheck.setBackgroundResource(R.drawable.checkmark_choose);
                         menu.setChoose(0);
+
+                        Log.e("Toggle", String.valueOf(chooseCheck.isChecked()));
 
                         Call<DefaultResponse> call = RetrofitClient.getInstance().getApi().updateChoose(menu.getName_menu(), 0);
                         call.enqueue(new Callback<DefaultResponse>() {
@@ -226,8 +298,6 @@ public class MenuRecycleAdapter extends RecyclerView.Adapter<MenuRecycleAdapter.
 
                             }
                         });
-
-                        Log.e("Toggle", String.valueOf(chooseCheck.isChecked()));
                     }
                 }
             });
@@ -240,6 +310,15 @@ public class MenuRecycleAdapter extends RecyclerView.Adapter<MenuRecycleAdapter.
     public void filterList(ArrayList arr) {
         this.mMenuList = arr;
         notifyDataSetChanged();
+    }
+
+    private MenuUser checkDate(List<MenuUser> menuUserList, String date) {
+        for(MenuUser mu : menuUserList) {
+            if(date.equals(mu.getDate())) {
+                return mu;
+            }
+        }
+        return null;
     }
 
 
