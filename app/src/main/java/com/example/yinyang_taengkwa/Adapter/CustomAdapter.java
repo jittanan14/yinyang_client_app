@@ -40,7 +40,7 @@ public class CustomAdapter extends ArrayAdapter<Menu> {
         TextView textView_num_yhang_textview = view.findViewById(R.id.num_yhang_text_view);
 
         ImageView ImageView = view.findViewById(R.id.imageView1);
-        ImageView img_cate = view.findViewById(R.id.img_category);
+
        final ToggleButton fav = view.findViewById(R.id.favourite);
        final ToggleButton choose = view.findViewById(R.id.choose_menu);
 
@@ -76,12 +76,12 @@ public class CustomAdapter extends ArrayAdapter<Menu> {
         textView_num_yhin_textview.setText(menu.getNum_yhin());
         textView_num_yhang_textview.setText(menu.getNum_yhang());
 
-        if(Double.valueOf(menu.getNum_yhin()) > Double.valueOf(menu.getNum_yhang())){
-           img_cate.setImageResource(R.drawable.ic_yin);
-        }
-        else if (Double.valueOf(menu.getNum_yhang()) > Double.valueOf(menu.getNum_yhin())) {
-            img_cate.setImageResource(R.drawable.ic_yang);
-        }
+//        if(Double.valueOf(menu.getNum_yhin()) > Double.valueOf(menu.getNum_yhang())){
+//           img_cate.setImageResource(R.drawable.ic_yin);
+//        }
+//        else if (Double.valueOf(menu.getNum_yhang()) > Double.valueOf(menu.getNum_yhin())) {
+//            img_cate.setImageResource(R.drawable.ic_yang);
+//        }
 
 
         Picasso.get().load("http://pilot.cp.su.ac.th/usr/u07580536/yhinyhang/images/menu/"+menu.getImage_menu()).into(ImageView);

@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.example.yinyang_taengkwa.R;
 import com.example.yinyang_taengkwa.api.RetrofitClient;
 import com.example.yinyang_taengkwa.models.DefaultResponse;
+import com.skyhope.materialtagview.TagView;
 import com.skyhope.materialtagview.TagView_me;
 import com.skyhope.materialtagview.model.TagModel;
 import com.squareup.picasso.Picasso;
@@ -72,10 +73,10 @@ public class EditprofileActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 
 
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         final String image = intent.getStringExtra("image");
-        String username = intent.getStringExtra("username");
-        String foodLose = intent.getStringExtra("foodLose");
+        final String username = intent.getStringExtra("username");
+        final String foodLose = intent.getStringExtra("foodLose");
 
 
         back_profile = findViewById(R.id.button_back_profile);
@@ -95,9 +96,11 @@ public class EditprofileActivity extends AppCompatActivity {
         tagview.setTagBackgroundColor("#FF9B9B9B");
         tagview.setTagTextColor("#FF070707");
 
+        if(!foodLose.contains("ไม่มี"))
+            setDataTagView(tagview, foodLose);
 
         if (image.isEmpty()) {
-           CircleImageViewProfile.setImageResource(R.drawable.ic_user);
+            CircleImageViewProfile.setImageResource(R.drawable.ic_user);
         } else {
 
             Picasso.get().load(url.concat(image)).into(CircleImageViewProfile);
@@ -121,21 +124,26 @@ public class EditprofileActivity extends AppCompatActivity {
 
                         String email = sp.getString("email", "");
                         final String username2 = editTextUsername.getText().toString().trim();
-                        final String food = Text_food.getText().toString().trim();
-
-
 
 
                         List<TagModel> foodd = tagview.getSelectedTags();
 
                         for (int i = 0; i < foodd.size(); i++) {
-                            textfood += foodd.get(i).getTagText() + ",";
+                            textfood += foodd.get(i).getTagText();
+                            if(!(i == (foodd.size() - 1)))
+                                textfood += ",";
+                        }
+
+                        Log.e("Food Lose", textfood);
+
+
+                        if (image_user.isEmpty()) {
+                            image_user = imageToString(((BitmapDrawable) CircleImageViewProfile.getDrawable()).getBitmap());
 
                         }
 
-                        if(image_user.isEmpty()){
-                            image_user = imageToString(((BitmapDrawable) CircleImageViewProfile.getDrawable()).getBitmap());
-
+                        if (textfood.isEmpty()) {
+                            textfood = "ไม่มี";
                         }
 
                         Call<DefaultResponse> call = RetrofitClient.getInstance().getApi().updateProfile(email, image_user, username2, textfood);
@@ -153,6 +161,9 @@ public class EditprofileActivity extends AppCompatActivity {
                                     edit.putString("username", username2);
                                     edit.putString("foodLose", textfood);
                                     edit.commit();
+
+                                    tagview = null;
+
                                     finish();
 
                                 } else {
@@ -373,5 +384,12 @@ public class EditprofileActivity extends AppCompatActivity {
         item.add("ซอสพริก");
         item.add("น้ำมัน");
 
+    }
+
+    private void setDataTagView(TagView_me tagView, String text) {
+        String[] textList = text.split(",");
+        for (String t : textList) {
+            tagView.addTag(t, false);
+        }
     }
 }

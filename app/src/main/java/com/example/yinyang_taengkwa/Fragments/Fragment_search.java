@@ -1,10 +1,10 @@
 package com.example.yinyang_taengkwa.Fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,26 +12,28 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
-import com.example.yinyang_taengkwa.Adapter.MenuRecycleAdapter;
+import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
+import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarFinalValueListener;
+import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
 import com.example.yinyang_taengkwa.Adapter.SearchAdapter;
+import com.example.yinyang_taengkwa.Animations.SlideAnimation;
 import com.example.yinyang_taengkwa.R;
 import com.example.yinyang_taengkwa.activities.DetailActivity;
 import com.example.yinyang_taengkwa.api.RetrofitClient;
 import com.example.yinyang_taengkwa.models.Menuresponse;
-import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -48,14 +50,25 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
  */
 public class Fragment_search extends Fragment {
 
-    ListView lst_view_search;
+    RecyclerView recyclerView;
     EditText editText_search;
     ImageView imgView_search;
     SearchAdapter adapter;
     Menuresponse res;
+    boolean statusView;
     TextView sort;
-    Button bt_yin, bt_yang;
+    Button button_yin, button_yang, confirmButton;
+    CrystalRangeSeekbar rangeSeekbar;
+    TextView tvMin, tvMax;
 
+
+    boolean ck_yin  = false;
+    boolean ck_yang = false;
+    boolean ck_seek = false;
+    boolean confirm = false;
+
+    Double minYinYang = 0.0;
+    Double maxYinYang = 0.0;
 
     public Fragment_search() {
         // Required empty public constructor
@@ -68,22 +81,126 @@ public class Fragment_search extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_search, container, false);
 
         // Recycler View
-        lst_view_search = view.findViewById(R.id.lstView);
-
+        recyclerView = view.findViewById(R.id.recycler_view);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
 
+        recyclerView.setLayoutManager(linearLayoutManager);
+        //Recycler View
 
-        // Recycler View
-
-
-        lst_view_search = view.findViewById(R.id.lstView);
         editText_search = view.findViewById(R.id.editText_search);
         imgView_search = view.findViewById(R.id.imgView_search);
         sort = view.findViewById(R.id.Textview_sort);
+        button_yin = view.findViewById(R.id.button_yin);
+        button_yang = view.findViewById(R.id.button_yang);
+        confirmButton = view.findViewById(R.id.confirm_button);
+
+        rangeSeekbar = view.findViewById(R.id.rangeSeekbar1);
+
+        tvMin = view.findViewById(R.id.textMin1);
+        tvMax = view.findViewById(R.id.textMax1);
+
 
         initSearch(view);
         setHasOptionsMenu(true);
+
+        // view we want to animate
+        final LinearLayout view_sort = view.findViewById(R.id.View_sort);
+
+        // set listener
+        rangeSeekbar.setOnRangeSeekbarChangeListener(new OnRangeSeekbarChangeListener() {
+            @Override
+            public void valueChanged(Number minValue, Number maxValue) {
+
+                tvMin.setText(String.format("%.2f", minValue));
+                tvMax.setText(String.format("%.2f", maxValue));
+
+                ck_seek = true;
+
+                minYinYang = Double.parseDouble(String.format("%.2f", minValue));
+                maxYinYang = Double.parseDouble(String.format("%.2f", maxValue));
+            }
+        });
+
+// set final value listener
+        rangeSeekbar.setOnRangeSeekbarFinalValueListener(new OnRangeSeekbarFinalValueListener() {
+            @Override
+            public void finalValue(Number minValue, Number maxValue) {
+                Log.d("CRS=>", String.valueOf(minValue) + " : " + String.valueOf(maxValue));
+            }
+        });
+
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                confirm = true;
+                if(ck_yin) {
+                    filterByRange(res.getMenu(), "หยิน", minYinYang, maxYinYang);
+                } else {
+                    filterByRange(res.getMenu(), "หยาง", minYinYang, maxYinYang);
+                }
+
+                Animation animation = new SlideAnimation(view_sort, 900, 0);
+
+                animation.setInterpolator(new AccelerateInterpolator());
+                animation.setDuration(300);
+                view_sort.setAnimation(animation);
+                view_sort.startAnimation(animation);
+            }
+        });
+
+        button_yin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //filter_yin("หยิน");
+                if(ck_yang)
+                    ck_yang = false;
+                ck_yin = true;
+            }
+        });
+
+
+        button_yang.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //filter_yang("หยาง");
+                if(ck_yin)
+                    ck_yin = false;
+                ck_yang = true;
+            }
+        });
+
+        sort.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (statusView == false) {
+
+
+                    Animation animation = new SlideAnimation(view_sort, 0, 1000);
+
+                    // this interpolator only speeds up as it keeps going
+                    animation.setInterpolator(new AccelerateInterpolator());
+                    animation.setDuration(300);
+                    view_sort.setAnimation(animation);
+                    view_sort.startAnimation(animation);
+                    statusView = true;
+                } else {
+
+                    Animation animation = new SlideAnimation(view_sort, 900, 0);
+
+                    // this interpolator only speeds up as it keeps going
+                    animation.setInterpolator(new AccelerateInterpolator());
+                    animation.setDuration(300);
+                    view_sort.setAnimation(animation);
+                    view_sort.startAnimation(animation);
+                    statusView = false;
+                }
+
+            }
+
+        });
+
 
         imgView_search.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,17 +244,6 @@ public class Fragment_search extends Fragment {
         });
 
 
-        lst_view_search.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                                Intent intent = new Intent(getContext(), DetailActivity.class);
-//                                intent.putExtra("DETAIL", i);
-//                                startActivity(intent);
-                Toast.makeText(getContext(), "EiEi", Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
         return view;
     }
 
@@ -162,9 +268,18 @@ public class Fragment_search extends Fragment {
                 if (res.isStatus() == true) {
                     if (res.getMenu() != null) {
 
-                        adapter = new SearchAdapter(getContext(), R.layout.listview_row_search, res.getMenu());
+                        adapter = new SearchAdapter(getContext(), res.getMenu());
+                        recyclerView.setAdapter(adapter);
 
-                        lst_view_search.setAdapter(adapter);
+                        adapter.setOnItemClickListener(new SearchAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(com.example.yinyang_taengkwa.models.Menu item) {
+                                Intent intent = new Intent(getContext(), DetailActivity.class);
+                                intent.putExtra("DETAIL", item);
+                                startActivity(intent);
+                            }
+                        });
+
                     }
                 }
             }
@@ -194,5 +309,109 @@ public class Fragment_search extends Fragment {
         }
 
     }
+
+
+    public void filter_yin(String data) {
+        ArrayList<com.example.yinyang_taengkwa.models.Menu> arr = new ArrayList<>();
+
+        for (com.example.yinyang_taengkwa.models.Menu menu : res.getMenu()) {
+            if (menu.getCategory_menu().contains(data)) {
+                arr.add(menu);
+            }
+        }
+
+        if (arr.size() > 0) {
+            adapter.filterList(arr);
+        } else {
+            adapter.filterList((ArrayList) null);
+            Toast.makeText(getContext(), "ไม่พบรายการ", Toast.LENGTH_SHORT);
+        }
+
+    }
+
+
+    public void filter_yang(String data) {
+        ArrayList<com.example.yinyang_taengkwa.models.Menu> arr = new ArrayList<>();
+
+        for (com.example.yinyang_taengkwa.models.Menu menu : res.getMenu()) {
+            if (menu.getCategory_menu().contains(data)) {
+                arr.add(menu);
+            }
+        }
+
+        if (arr.size() > 0) {
+            adapter.filterList(arr);
+        } else {
+            adapter.filterList((ArrayList) null);
+            Toast.makeText(getContext(), "ไม่พบรายการ", Toast.LENGTH_SHORT);
+        }
+
+    }
+
+
+    public void filter_yin_seek(String data, double min, double max) {
+        ArrayList<com.example.yinyang_taengkwa.models.Menu> arr = new ArrayList<>();
+
+        for (com.example.yinyang_taengkwa.models.Menu menu : res.getMenu()) {
+            if (menu.getCategory_menu().contains(data) && Double.parseDouble(menu.getNum_yhin()) >= min && Double.parseDouble(menu.getNum_yhang()) <= max) {
+                arr.add(menu);
+            }
+        }
+
+        if (arr.size() > 0) {
+            adapter.filterList(arr);
+        } else {
+            adapter.filterList((ArrayList) null);
+            Toast.makeText(getContext(), "ไม่พบรายการ", Toast.LENGTH_SHORT);
+        }
+
+    }
+
+    public void filter_yang_seek(String data, double min, double max) {
+        ArrayList<com.example.yinyang_taengkwa.models.Menu> arr = new ArrayList<>();
+
+        for (com.example.yinyang_taengkwa.models.Menu menu : res.getMenu()) {
+            if (menu.getCategory_menu().contains(data) && Double.parseDouble(menu.getNum_yhin()) >= min && Double.parseDouble(menu.getNum_yhang()) <= max) {
+                arr.add(menu);
+            }
+        }
+
+        if (arr.size() > 0) {
+            adapter.filterList(arr);
+        } else {
+            adapter.filterList((ArrayList) null);
+            Toast.makeText(getContext(), "ไม่พบรายการ", Toast.LENGTH_SHORT);
+        }
+
+    }
+
+
+    private void filterByRange(List<com.example.yinyang_taengkwa.models.Menu> menuList, String type, double minRange, double maxRange) {
+        ArrayList<com.example.yinyang_taengkwa.models.Menu> arr = new ArrayList<>();
+
+        for (com.example.yinyang_taengkwa.models.Menu menu : menuList) {
+            if(menu.getCategory_menu().equals(type) && getNumByType(type, menu) >= minRange && getNumByType(type, menu) <= maxRange) {
+                arr.add(menu);
+            }
+        }
+
+        Log.e("Min Yin", String.valueOf(minRange));
+        Log.e("Max Yin", String.valueOf(maxRange));
+
+        if(arr.size() > 0) {
+            adapter.filterList(arr);
+        } else {
+            adapter.filterList(arr);
+        }
+    }
+
+    private double getNumByType(String type, com.example.yinyang_taengkwa.models.Menu menu) {
+        if(type.equals("หยิน")) {
+            return Double.parseDouble(menu.getNum_yhin());
+        } else {
+            return Double.parseDouble(menu.getNum_yhang());
+        }
+    }
+
 
 }

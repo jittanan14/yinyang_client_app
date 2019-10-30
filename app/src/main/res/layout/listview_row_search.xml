@@ -1,100 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_main2"
+    android:gravity="center_vertical"
     android:orientation="vertical"
-    android:paddingLeft="15dp"
-    android:paddingTop="15dp"
-    android:paddingRight="15dp"
-    android:paddingBottom="15dp">
+    android:paddingTop="8dp">
 
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:layout_gravity="center_horizontal"
-        android:scaleType="centerCrop" />
-
-    <TextView
-        android:id="@+id/name_menu_textview"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/imageView1"
-        android:layout_marginTop="5dp"
-        android:fontFamily="@font/printable4u"
-        android:text="ชื่อเมนูอาหาร"
-        android:textColor="#000000"
-        android:textSize="30dp"
-        android:textStyle="bold" />
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="8dp">
 
-    <ImageView
-        android:id="@+id/img_category"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/name_menu_textview"
-        android:layout_marginRight="15dp" />
+        <ToggleButton
+            android:id="@+id/favorite_toggle_button"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="right"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/ic_favorite_border_black_24dp"
+            android:textOff=""
+            android:textOn="" />
 
-    <TextView
-        android:id="@+id/category_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/name_menu_textview"
-        android:layout_toRightOf="@id/img_category"
-        android:fontFamily="@font/printable4u"
-        android:text="ประเภท :"
-        android:textColor="#000000"
-        android:textSize="18dp" />
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-    <ToggleButton
-        android:id="@+id/favorite_toggle_button"
-        android:layout_width="37dp"
-        android:layout_height="37dp"
-        android:layout_below="@id/name_menu_textview"
-        android:layout_alignParentRight="true"
-        android:background="@drawable/ic_favorite_border_black_24dp"
-        android:textOff=""
-        android:textOn="" />
+            <ImageView
+                android:id="@+id/imageView1"
+                android:layout_width="fill_parent"
+                android:layout_height="180dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/food" />
 
-    <TextView
-        android:id="@+id/num_yhin_textview2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/favorite_toggle_button"
-        android:fontFamily="@font/printable4u"
-        android:text="ค่าหยิน"
-        android:textColor="#000000"
-        android:textSize="18dp" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:src="@drawable/frame"
 
-    <TextView
-        android:id="@+id/num_yhin_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/favorite_toggle_button"
-        android:layout_toRightOf="@id/num_yhin_textview2"
-        android:fontFamily="@font/printable4u"
-        android:textColor="#000000"
-        android:textSize="18dp" />
+                />
 
-    <TextView
-        android:id="@+id/num_yhang_textview3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/favorite_toggle_button"
-        android:layout_toRightOf="@id/num_yhin_text_view"
-        android:fontFamily="@font/printable4u"
-        android:text="ค่าหยาง"
-        android:textColor="#000000"
-        android:textSize="18dp" />
+        </FrameLayout>
 
-    <TextView
-        android:id="@+id/num_yhang_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/favorite_toggle_button"
-        android:layout_toRightOf="@id/num_yhang_textview3"
-        android:fontFamily="@font/printable4u"
-        android:textColor="#000000"
-        android:textSize="18dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="8dp"
+            android:orientation="vertical"
+            android:paddingLeft="16dp">
 
-</LinearLayout>
+            <TextView
+                android:id="@+id/category_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="@drawable/bg_yang"
+                android:fontFamily="@font/printable4u"
+                android:gravity="center_horizontal"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="ประเภท"
+                android:textColor="#fff"
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/name_menu_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/printable4u"
+                android:text="ชื่อเมนูอาหาร"
+                android:textColor="#fff"
+                android:textSize="30dp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/num_yhin_textview2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/printable4u"
+                    android:text="ค่าหยิน"
+                    android:textColor="#fff"
+                    android:textSize="18dp" />
+
+                <TextView
+                    android:id="@+id/num_yhin_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:fontFamily="@font/printable4u"
+                    android:textColor="#fff"
+                    android:textSize="18dp" />
+
+                <TextView
+                    android:id="@+id/num_yhang_textview3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:fontFamily="@font/printable4u"
+                    android:text="ค่าหยาง"
+                    android:textColor="#fff"
+                    android:textSize="18dp" />
+
+                <TextView
+                    android:id="@+id/num_yhang_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:fontFamily="@font/printable4u"
+                    android:textColor="#fff"
+                    android:textSize="18dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginLeft="15dp"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:layout_marginRight="15dp"-->
+<!--        android:orientation="horizontal">-->
+
+<!--        <ToggleButton-->
+<!--            android:id="@+id/choose_menu"-->
+<!--            android:layout_width="30dp"-->
+<!--            android:layout_height="30dp"-->
+<!--            android:layout_marginRight="20dp"-->
+<!--            android:background="@drawable/checkmark_choose"-->
+<!--            android:textOff=""-->
+<!--            android:textOn="">-->
+
+<!--        </ToggleButton>-->
+
+
+<!--    </LinearLayout>-->
+
+</RelativeLayout>

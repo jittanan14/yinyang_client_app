@@ -14,7 +14,9 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.example.yinyang_taengkwa.Fragments.Fragment_foodcomment;
+import com.example.yinyang_taengkwa.Question;
 import com.example.yinyang_taengkwa.R;
+import com.example.yinyang_taengkwa.activities.MainActivity;
 import com.example.yinyang_taengkwa.api.RetrofitClient;
 import com.example.yinyang_taengkwa.models.DefaultResponse;
 import com.example.yinyang_taengkwa.models.Menu;
@@ -39,7 +41,13 @@ public class MenuRecycleAdapter extends RecyclerView.Adapter<MenuRecycleAdapter.
     private Context mContext;
     private List<Menu> mMenuList;
     SharedPreferences sp;
+    SharedPreferences.Editor editor;
     Calendar calendar;
+    double sum_yin_menu = 0.0;
+    double sum_yang_menu = 0.0;
+    RetrofitClient retro;
+    double yin_user =0.0 ;
+    double yang_user=0.0;
 
     private String url = "http://pilot.cp.su.ac.th/usr/u07580536/yhinyhang/images/menu/";
 
@@ -77,14 +85,15 @@ public class MenuRecycleAdapter extends RecyclerView.Adapter<MenuRecycleAdapter.
         holder.setFavoriteToggle();
         holder.setChoose_Menu();
 
+        holder.bind(menu, mListener);
 
         if (Double.valueOf(menu.getNum_yhin()) > Double.valueOf(menu.getNum_yhang())) {
-            holder.img_cate.setImageResource(R.drawable.ic_yin);
+            holder.categoryText.setBackgroundResource(R.drawable.bg_yin);
         } else if (Double.valueOf(menu.getNum_yhang()) > Double.valueOf(menu.getNum_yhin())) {
-            holder.img_cate.setImageResource(R.drawable.ic_yang);
+            holder.categoryText.setBackgroundResource(R.drawable.bg_yang);
         }
 
-        holder.bind(menu, mListener);
+
     }
 
     @Override
@@ -114,11 +123,12 @@ public class MenuRecycleAdapter extends RecyclerView.Adapter<MenuRecycleAdapter.
             yinText = itemView.findViewById(R.id.num_yhin_text_view);
             yangText = itemView.findViewById(R.id.num_yhang_text_view);
             imageMenu = itemView.findViewById(R.id.imageView1);
-            img_cate = itemView.findViewById(R.id.img_category);
+
             favoriteToggle = itemView.findViewById(R.id.favorite_toggle_button);
             chooseCheck = itemView.findViewById(R.id.choose_menu);
             sp = mContext.getSharedPreferences("Log in", Context.MODE_PRIVATE);
             calendar = Calendar.getInstance();
+            retro = new RetrofitClient();
         }
 
         public void bind(final Menu item, final OnItemClickListener listener) {
@@ -170,6 +180,7 @@ public class MenuRecycleAdapter extends RecyclerView.Adapter<MenuRecycleAdapter.
                             public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
                                 DefaultResponse res = response.body();
 
+
                             }
 
                             @Override
@@ -207,6 +218,9 @@ public class MenuRecycleAdapter extends RecyclerView.Adapter<MenuRecycleAdapter.
                         chooseCheck.setBackgroundResource(R.drawable.checkmark2);
                         menu.setChoose(1);
 
+                        chooseAndUpdateyinyang_user(menu.getNum_yhin(), menu.getNum_yhang());
+
+
                         Log.e("Toggle", String.valueOf(chooseCheck.isChecked()));
 
                         Call<DefaultResponse> call1 = RetrofitClient.getInstance().getApi().updateChoose(menu.getName_menu(), 1);
@@ -223,7 +237,6 @@ public class MenuRecycleAdapter extends RecyclerView.Adapter<MenuRecycleAdapter.
                             }
                         });
 
-
                         final String user_id = sp.getString("email", "");
                         final String date = DateFormat.getDateInstance().format(calendar.getTime());
                         final String[] menu_id = {menu.getName_menu()};
@@ -236,11 +249,13 @@ public class MenuRecycleAdapter extends RecyclerView.Adapter<MenuRecycleAdapter.
                                 MenuUserResponse res = response.body();
                                 List<MenuUser> menuUserList = res.getMenuUser();
 
-                                if(!res.isStatus()) {
+                                if (!res.isStatus()) {
                                     Call<DefaultResponse> call = RetrofitClient.getInstance().getApi().createMenuUser(user_id, date, menu_id[0]);
                                     call.enqueue(new Callback<DefaultResponse>() {
                                         @Override
                                         public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
+
+                                            //
 
                                         }
 
@@ -253,7 +268,7 @@ public class MenuRecycleAdapter extends RecyclerView.Adapter<MenuRecycleAdapter.
                                     Log.e("Get User", String.valueOf(res.isStatus()));
 
                                     MenuUser mu;
-                                    if((mu = checkDate(menuUserList, date)) != null) {
+                                    if ((mu = checkDate(menuUserList, date)) != null) {
                                         menu_id[0] = mu.getMenu_id() + "," + menu_id[0];
 
                                         Call<DefaultResponse> call = RetrofitClient.getInstance().getApi().updateMenuUser(user_id, menu_id[0]);
@@ -283,13 +298,16 @@ public class MenuRecycleAdapter extends RecyclerView.Adapter<MenuRecycleAdapter.
                         chooseCheck.setBackgroundResource(R.drawable.checkmark_choose);
                         menu.setChoose(0);
 
-                        Log.e("Toggle", String.valueOf(chooseCheck.isChecked()));
+                        String email = sp.getString("email"," ");
+                        String yin = sp.getString("numYhin"," ");
+                        String yang = sp.getString("numYhang"," ");
 
-                        Call<DefaultResponse> call = RetrofitClient.getInstance().getApi().updateChoose(menu.getName_menu(), 0);
-                        call.enqueue(new Callback<DefaultResponse>() {
+                        Call<DefaultResponse> call3 = retro.getApi().updateYhinYhang(Double.parseDouble(yin), Double.parseDouble(yang), email);
+                        call3.enqueue(new Callback<DefaultResponse>() {
                             @Override
                             public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
                                 DefaultResponse res = response.body();
+
 
                             }
 
@@ -298,14 +316,100 @@ public class MenuRecycleAdapter extends RecyclerView.Adapter<MenuRecycleAdapter.
 
                             }
                         });
-                    }
-                }
-            });
 
+
+                        Log.e("Toggle", String.valueOf(chooseCheck.isChecked()));
+
+                        Call<DefaultResponse> call = RetrofitClient.getInstance().getApi().updateChoose(menu.getName_menu(), 0);
+                        call.enqueue(new Callback<DefaultResponse>() {
+                            @Override
+                            public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
+                                DefaultResponse res = response.body();
+
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<DefaultResponse> call, Throwable t) {
+
+                            }
+                        });
+
+
+                        final String user_id = sp.getString("email", "");
+                        final String date = DateFormat.getDateInstance().format(calendar.getTime());
+                        final String[] menu_id = {menu.getName_menu()};
+                        final ArrayList<String> newList = new ArrayList<>();
+
+
+                        final Call<MenuUserResponse> call2 = RetrofitClient.getInstance().getApi().getMenuUser(user_id);
+                        call2.enqueue(new Callback<MenuUserResponse>() {
+                            @Override
+                            public void onResponse(Call<MenuUserResponse> call, Response<MenuUserResponse> response) {
+                                MenuUserResponse res = response.body();
+                                List<MenuUser> menuUserList = res.getMenuUser();
+
+
+                                if (res.isStatus()) {
+
+                                    MenuUser mu = checkDate(menuUserList, date);
+
+                                 //   Log.e("Uncheck", mu.getMenu_id());
+
+                                    final String[] menuOnDB = mu.getMenu_id().split(",");
+                                    String menuUpDB = "";
+                                    for (int i = 0; i < menuOnDB.length; i++) {
+
+                                        if (!menuOnDB[i].equals(menu.getName_menu())) {
+                                            if (i == (menuOnDB.length - 1)) {
+                                                menuUpDB += menuOnDB[i];
+                                                System.out.println("DBlength : " + menuOnDB.length);
+                                            } else {
+                                                menuUpDB += menuOnDB[i] + ",";
+                                                System.out.println("DBsize : " + menuOnDB.length);
+                                            }
+
+                                        }
+
+                                    }
+
+                                    if (menuUpDB.equals(",")) {
+                                        menuUpDB = "";
+                                    }
+
+                                    Call<DefaultResponse> call2 = RetrofitClient.getInstance().getApi().updateMenuUser(user_id, menuUpDB);
+                                    call2.enqueue(new Callback<DefaultResponse>() {
+                                        @Override
+                                        public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
+
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<DefaultResponse> call, Throwable t) {
+                                            Log.e("Update Menu User", t.getMessage());
+                                        }
+                                    });
+
+
+                                    Log.e("Up menu to database", menuUpDB);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<MenuUserResponse> call, Throwable t) {
+
+                            }
+                        });
+
+                    }
+
+                }
+
+            });
         }
 
-
     }
+
 
     public void filterList(ArrayList arr) {
         this.mMenuList = arr;
@@ -313,12 +417,167 @@ public class MenuRecycleAdapter extends RecyclerView.Adapter<MenuRecycleAdapter.
     }
 
     private MenuUser checkDate(List<MenuUser> menuUserList, String date) {
-        for(MenuUser mu : menuUserList) {
-            if(date.equals(mu.getDate())) {
+        for (MenuUser mu : menuUserList) {
+            if (date.equals(mu.getDate())) {
                 return mu;
             }
         }
         return null;
+    }
+
+
+    Double yin_update =0.0;
+    Double yang_update=0.0;
+
+    public void chooseAndUpdateyinyang_user(String num_yhin, String num_yhang) {
+        sp = mContext.getSharedPreferences("Log in", Context.MODE_PRIVATE);
+        String email = sp.getString("email", " ");
+        String yin = sp.getString("numYhin"," ");
+        String yang = sp.getString("numYhang"," ");
+
+
+        yin_user = Double.parseDouble(yin);
+        yang_user = Double.parseDouble(yang);
+
+        Log.e("beforeyin", String.valueOf(yin));
+        Log.e("beforeyang", String.valueOf(yang));
+
+        double num_yin_menu = Double.parseDouble(num_yhin);
+        double num_yang_menu = Double.parseDouble(num_yhang);
+
+
+        sum_yin_menu = num_yin_menu;
+        sum_yang_menu = num_yang_menu;
+
+        Log.e("Num Yin", String.valueOf(num_yin_menu));
+        Log.e("Num Yang", String.valueOf(num_yang_menu));
+
+        double yinmax = Math.abs(Double.parseDouble(String.format("%.2f", yin_user - 2.4)));
+        double yinmin = Math.abs(Double.parseDouble(String.format("%.2f", yin_user- 2.6)));
+
+        double yangmax = Math.abs(Double.parseDouble(String.format("%.2f", yang_user - 2.4)));
+        double yangmin = Math.abs(Double.parseDouble(String.format("%.2f", yang_user - 2.6)));
+
+        if (sum_yin_menu >= yinmin && sum_yin_menu <= yinmax) {
+            if (sum_yin_menu == num_yin_menu) {
+                sum_yin_menu = Double.parseDouble(String.format("%.2f", sum_yin_menu));
+            }else {
+                sum_yin_menu += Double.parseDouble(String.format("%.2f", sum_yin_menu));
+            }
+        }
+
+        if (sum_yang_menu >= yangmin && sum_yang_menu <= yangmax) {
+            if (sum_yang_menu == num_yang_menu){
+                sum_yang_menu = Double.parseDouble(String.format("%.2f", sum_yang_menu)) ;
+            }else {
+                sum_yang_menu += Double.parseDouble(String.format("%.2f", sum_yang_menu)) ;
+            }
+
+        }
+        Calculate_yinyang_user();
+
+        Call<DefaultResponse> call2 = retro.getApi().updateYhinYhang(yin_user, yang_user, email);
+
+        call2.enqueue(new Callback<DefaultResponse>() {
+            @Override
+            public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
+                DefaultResponse res = response.body();
+                SharedPreferences.Editor editor = sp.edit();
+
+                editor.putString("numYhin", String.valueOf(yin_user));
+                editor.putString("numYhang", String.valueOf(yang_user));
+                editor.commit();
+
+                Log.e("Update ", "success");
+            }
+
+            @Override
+            public void onFailure(Call<DefaultResponse> call, Throwable t) {
+                Log.e("Update YY", t.getMessage());
+            }
+        });
+
+    }
+
+
+
+    public void Calculate_yinyang_user() {
+        sp = mContext.getSharedPreferences("Log in", Context.MODE_PRIVATE);
+        editor = sp.edit();
+
+        String email = sp.getString("email", " ");
+        String yin = sp.getString("numYhin"," ");
+        String yang = sp.getString("numYhang"," ");
+
+
+        yin_user = Double.parseDouble(yin);
+        yang_user = Double.parseDouble(yang);
+
+
+        Log.e("beforeyin", String.valueOf(sum_yin_menu));
+        Log.e("beforeyang", String.valueOf(sum_yang_menu));
+
+
+        if (yin_user > 2.6 && yang_user > 2.6) {
+
+            yin_user = Math.abs(yin_user - sum_yin_menu);
+            yang_user = Math.abs(yang_user - sum_yang_menu);
+
+
+        } else if (yin_user < 2.4 && yang_user < 2.4) {
+            yin_user = Math.abs(yin_user + sum_yin_menu);
+            yang_user = Math.abs(yang_user + sum_yang_menu);
+
+
+        } else if (yin_user > 2.6 && yang_user < 2.4) {
+            yin_user = Math.abs(yin_user - sum_yin_menu);
+            yang_user = Math.abs(yang_user + sum_yang_menu);
+
+        } else if (yin_user < 2.4 && yang_user > 2.6) {
+            yin_user = Math.abs(yin_user + sum_yin_menu);
+            yang_user = Math.abs(yang_user - sum_yang_menu);
+
+        }else  if(yin_user < 2.4 && yang_user>=2.4 && yang_user<=2.6){
+            yin_user = Math.abs(yin_user + sum_yin_menu);
+            yang_user = Math.abs(yang_user + sum_yang_menu);
+        }
+        else if(yin_user>=2.4 && yin_user<=2.6 && yang_user < 2.4){
+            yin_user = Math.abs(yin_user + sum_yin_menu);
+            yang_user = Math.abs(yang_user + sum_yang_menu);
+        }
+        else if(yin_user > 2.6 && yang_user>=2.4 && yang_user<=2.6){
+            yin_user = Math.abs(yin_user - sum_yin_menu);
+            yang_user = Math.abs(yang_user + sum_yang_menu);
+        }
+        else if(yin_user>=2.4 && yin_user<=2.6 && yang_user > 2.6){
+            yin_user = Math.abs(yin_user + sum_yin_menu);
+            yang_user = Math.abs(yang_user - sum_yang_menu);
+        }
+
+
+
+        Log.e("yin", String.valueOf(yin_user));
+        Log.e("yang", String.valueOf(yang_user));
+
+
+//        Call<DefaultResponse> call2 = retro.getApi().updateYhinYhang(yin_user, yang_user, email);
+//
+//        call2.enqueue(new Callback<DefaultResponse>() {
+//            @Override
+//            public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
+//                DefaultResponse res = response.body();
+//
+//
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Call<DefaultResponse> call, Throwable t) {
+//                Log.e("Update YY", t.getMessage());
+//            }
+//        });
+
+
     }
 
 

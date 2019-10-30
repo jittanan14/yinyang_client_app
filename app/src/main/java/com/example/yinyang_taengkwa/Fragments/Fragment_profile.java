@@ -129,7 +129,9 @@ public class Fragment_profile extends Fragment {
         layout_choosequestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getContext(), Question_list.class));
+                Intent intent = new Intent(getContext(), Question_list.class);
+                intent.putExtra("ch","1");
+                startActivity(intent);
             }
         });
 
@@ -143,7 +145,9 @@ public class Fragment_profile extends Fragment {
         layout_Gotoquestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getContext(), Question.class));
+                Intent intent = new Intent(getContext(), Question.class);
+                intent.putExtra("ch","0");
+                startActivity(intent);
             }
         });
 

@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +41,7 @@ public class Question extends AppCompatActivity implements View.OnClickListener 
     String email;
     TextView textView_numberques;
     String text;
+    //boolean cf;
     private SharedPreferences sp;
     private String PREF_NAME = "Log in";
 
@@ -49,7 +51,8 @@ public class Question extends AppCompatActivity implements View.OnClickListener 
     private int Score[];
     private int Score2[];
     int check = 0;
-    int answer = 0;
+    int answer;
+    double point = 0.0;
 
     int yhin;
     int yhang;
@@ -57,6 +60,7 @@ public class Question extends AppCompatActivity implements View.OnClickListener 
     double sum_yhang = 0;
     int index = 1;
     double max = Double.MIN_VALUE;
+    String ch = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +79,7 @@ public class Question extends AppCompatActivity implements View.OnClickListener 
         button_previous = findViewById(R.id.button_previous_question);
         button_previous.setOnClickListener(this);
         button_confirmall = findViewById(R.id.button_confirmall);
+
         button_confirmall.setOnClickListener(this);
         button_back_login = findViewById(R.id.button_back_login);
 
@@ -96,7 +101,7 @@ public class Question extends AppCompatActivity implements View.OnClickListener 
             Toast.makeText(this, String.valueOf(index), Toast.LENGTH_SHORT).show();
             setQuestionByIndex(index);
 
-            int answer = answerPref.getInt(String.valueOf(index), 0);
+            answer = answerPref.getInt(String.valueOf(index), 0);
             setAnswer(answer);
         } else {
             setFirstQuestion();
@@ -106,6 +111,15 @@ public class Question extends AppCompatActivity implements View.OnClickListener 
 
 
         email = sp.getString("email", "");
+
+       ch = getIntent().getStringExtra("ch");
+//        if(ch.equals("0")){
+//            Log.e("ทำแบบสอบถามใหม่"," ");
+//        }
+
+        if (ch == "1") {
+            Log.e("เลือกแบบสอบถาม >>>>>>>>", " ");
+        }
     }
 
     @Override
@@ -178,22 +192,27 @@ public class Question extends AppCompatActivity implements View.OnClickListener 
             case 1:
                 radioButton = findViewById(R.id.radioButton1);
                 radioButton.setChecked(true);
+                point = 1;
                 break;
             case 2:
                 radioButton = findViewById(R.id.radioButton2);
                 radioButton.setChecked(true);
+                point = 2;
                 break;
             case 3:
                 radioButton = findViewById(R.id.radioButton3);
                 radioButton.setChecked(true);
+                point = 3;
                 break;
             case 4:
                 radioButton = findViewById(R.id.radioButton4);
                 radioButton.setChecked(true);
+                point = 4;
                 break;
             case 5:
                 radioButton = findViewById(R.id.radioButton5);
                 radioButton.setChecked(true);
+                point = 5;
                 break;
         }
 
@@ -244,7 +263,7 @@ public class Question extends AppCompatActivity implements View.OnClickListener 
 
     public void checkButton(View v) {
         int radioId = radioGroup.getCheckedRadioButtonId();
-//        radioButton = findViewById(radioId);
+        //  radioButton = findViewById(radioId);
 
 //        Toast.makeText(this, String.valueOf(radioId), Toast.LENGTH_SHORT).show();
 
@@ -254,7 +273,9 @@ public class Question extends AppCompatActivity implements View.OnClickListener 
 
         radioButton = findViewById(radioId);
 
+        String score = String.valueOf(Score[index]);
 
+        Log.e("Score >> ", index + " : " + score);
 //        int score = Integer.parseInt(radioButton.getText().toString());
 //        Score[index] = score;
 
@@ -339,9 +360,37 @@ public class Question extends AppCompatActivity implements View.OnClickListener 
 
     private void confirmAll() {
 
+        String email = sp.getString("email", " ");
+        String numyin = sp.getString("numYhin", " ");
+        String numyanng = sp.getString("numYhang", " ");
 
-        CalculateNumyhinyhang();
+        double yin1 = Double.parseDouble(numyin);
+        double yang2 = Double.parseDouble(numyanng);
+        ch = getIntent().getStringExtra("ch");
 
+        if(ch=="0"){
+            //เช็คว่ามาจากหน้า profire
+            Log.e("ทำแบบสอบถามใหม่",numyin+" "+numyanng);
+
+            CalculateNumyhinyhang();
+
+        }
+
+        if (yin1!=0.0 && yang2!=0.0 && ch =="1") {
+            Log.e("เลือกแบบสอบถาม >>>>>>>>", numyin + " " + numyanng);
+            editYinyang(yin1, yang2);
+
+            SharedPreferences.Editor editor = sp.edit();
+
+            editor.putString("numYhin", String.valueOf(numyin));
+            editor.putString("numYhang", String.valueOf(numyanng));
+            editor.commit();
+
+        }
+        else{
+            //ผู้ใช้ใหม่
+            CalculateNumyhinyhang();
+        }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(Question.this, R.style.AlertDialogCustom);
 
@@ -394,8 +443,8 @@ public class Question extends AppCompatActivity implements View.OnClickListener 
                             SharedPreferences sp = getSharedPreferences("Log in", MODE_PRIVATE);
                             SharedPreferences.Editor editor = sp.edit();
 
-                            editor.putString("numYhin", s1);
-                            editor.putString("numYhang", s2);
+                            editor.putString("numYhin", String.valueOf(s1));
+                            editor.putString("numYhang", String.valueOf(s2));
                             editor.commit();
 
                             Intent intent = new Intent(Question.this, MainActivity.class);
@@ -419,18 +468,64 @@ public class Question extends AppCompatActivity implements View.OnClickListener 
 
 
     public void CalculateNumyhinyhang() {
+        double yhin = 0.0;
+        double yhang = 0.0;
 
         for (int i = 1; i <= Score.length; i++) {
 
             if (i >= 1 && i <= 13) {
-                sum_yhin += Score[i];
+                yhin += Score[i];
             } else if (i >= 14 && i <= 21) {
-                sum_yhang += Score[i];
+                yhang += Score[i];
             }
         }
 
-        sum_yhin = sum_yhin / 13;
-        sum_yhang = sum_yhang / 8;
+        sum_yhin = yhin / 13;
+        sum_yhang = yhang / 8;
+
+
+    }
+
+
+    public void editYinyang(double Oyin, double Oyang) {
+
+        int radioId = radioGroup.getCheckedRadioButtonId();
+
+//        double yinn = Double.parseDouble(String.format("%.2f",Oyin) );
+//        double yangg = Double.parseDouble(String.format("%.2f",Oyang) );
+
+        Oyin = Oyin * 13;
+        Oyang = Oyang * 8;
+
+        String oldindex = String.valueOf(index); //เลขข้อ
+
+        Score[index] = getScore(radioId);
+        double newScore = Score[index];
+
+        Log.e("index", oldindex);
+        Log.e("Ans", String.valueOf(point));
+        Log.e("Scoreedit >> ", String.valueOf(newScore));
+        Log.e("Oyin", String.valueOf(Oyin / 13));
+        Log.e("Oyang", String.valueOf(Oyang / 8));
+
+
+        if (index >= 1 && index <= 13) {
+            sum_yhin = ((Oyin - point) + newScore) / 13;
+            sum_yhin = Double.parseDouble(String.format("%.2f", sum_yhin));
+
+            sum_yhang = Double.parseDouble(String.format("%.2f", Oyang / 8));
+        }
+        if (index >= 14 && index <= 21) {
+            sum_yhang = ((Oyang - point) + newScore) / 8;
+            sum_yhang = Double.parseDouble(String.format("%.2f", sum_yhang));
+
+            sum_yhin = Double.parseDouble(String.format("%.2f", Oyin / 13));
+        }
+
+        Log.e("Newyin", String.valueOf(Oyin / 13) + " : " + String.valueOf(sum_yhin));
+        Log.e("Newyang", String.valueOf(Oyang / 8) + " : " + String.valueOf(sum_yhang));
+
+
     }
 
 

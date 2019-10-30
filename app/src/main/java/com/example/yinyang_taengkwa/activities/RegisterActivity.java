@@ -721,7 +721,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
                 if (response.body().isStatus()) {
                     Toast.makeText(RegisterActivity.this, "สมัครสมาชิกสำเร็จ", Toast.LENGTH_LONG).show();
 
-                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                    Intent intent = new Intent(RegisterActivity.this, Question.class);
                     intent.putExtra("yhinyhang", yhinyhang.getText().toString().trim());
                     startActivity(intent);
                     finish();
