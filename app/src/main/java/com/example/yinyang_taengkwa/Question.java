@@ -42,11 +42,13 @@ public class Question extends AppCompatActivity implements View.OnClickListener 
     TextView textView_numberques;
     String text;
     //boolean cf;
-    private SharedPreferences sp;
-    private String PREF_NAME = "Log in";
+    private SharedPreferences logInPref;
+    private SharedPreferences.Editor logInEditor;
+    private String PREF_NAME_LOGIN = "Log in";
 
     private SharedPreferences answerPref;
-    private SharedPreferences.Editor editor;
+    private SharedPreferences.Editor answerEditor;
+    private String PERF_NAME_ANSWER = "Answer";
 
     private int Score[];
     private int Score2[];
@@ -68,9 +70,11 @@ public class Question extends AppCompatActivity implements View.OnClickListener 
         setContentView(R.layout.activity_question);
         getSupportActionBar().hide();
 
-        sp = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
-        answerPref = getSharedPreferences("Answer", MODE_PRIVATE);
-        editor = answerPref.edit();
+        logInPref = getSharedPreferences(PREF_NAME_LOGIN, MODE_PRIVATE);
+        logInEditor = logInPref.edit();
+
+        answerPref = getSharedPreferences(PREF_NAME_LOGIN, MODE_PRIVATE);
+        answerEditor = answerPref.edit();
 
         Text_question = findViewById(R.id.Text_question);
         textView_numberques = findViewById(R.id.textview_numberques);
@@ -110,9 +114,9 @@ public class Question extends AppCompatActivity implements View.OnClickListener 
         setQuestion();
 
 
-        email = sp.getString("email", "");
+        email = logInPref.getString("email", "");
 
-       ch = getIntent().getStringExtra("ch");
+        ch = getIntent().getStringExtra("ch");
 //        if(ch.equals("0")){
 //            Log.e("ทำแบบสอบถามใหม่"," ");
 //        }
@@ -268,8 +272,8 @@ public class Question extends AppCompatActivity implements View.OnClickListener 
 //        Toast.makeText(this, String.valueOf(radioId), Toast.LENGTH_SHORT).show();
 
         Score[index] = getScore(radioId);
-        editor.putInt(String.valueOf(index), getScore(radioId));
-        editor.commit();
+        answerEditor.putInt(String.valueOf(index), getScore(radioId));
+        answerEditor.commit();
 
         radioButton = findViewById(radioId);
 
@@ -360,36 +364,36 @@ public class Question extends AppCompatActivity implements View.OnClickListener 
 
     private void confirmAll() {
 
-        String email = sp.getString("email", " ");
-        String numyin = sp.getString("numYhin", " ");
-        String numyanng = sp.getString("numYhang", " ");
+        String email    = logInPref.getString("email", " ");
+        String numyin   = logInPref.getString("numYhin", " ");
+        String numyanng = logInPref.getString("numYhang", " ");
 
         double yin1 = Double.parseDouble(numyin);
         double yang2 = Double.parseDouble(numyanng);
         ch = getIntent().getStringExtra("ch");
 
-        if(ch=="0"){
+
+        if (ch.equals("0")) {
             //เช็คว่ามาจากหน้า profire
-            Log.e("ทำแบบสอบถามใหม่",numyin+" "+numyanng);
+            Log.e("ทำแบบสอบถามใหม่", numyin + " " + numyanng);
 
             CalculateNumyhinyhang();
 
-        }
+        } else {
+            if (yin1 != 0.0 && yang2 != 0.0) {
 
-        if (yin1!=0.0 && yang2!=0.0 && ch =="1") {
-            Log.e("เลือกแบบสอบถาม >>>>>>>>", numyin + " " + numyanng);
-            editYinyang(yin1, yang2);
+                Log.e("เลือกแบบสอบถาม >>>>>>>>", numyin + " " + numyanng);
 
-            SharedPreferences.Editor editor = sp.edit();
+                editYinyang(yin1, yang2);
 
-            editor.putString("numYhin", String.valueOf(numyin));
-            editor.putString("numYhang", String.valueOf(numyanng));
-            editor.commit();
+            } else {
+                //ผู้ใช้ใหม่
 
-        }
-        else{
-            //ผู้ใช้ใหม่
-            CalculateNumyhinyhang();
+                Log.e("NewUser", " ");
+
+                CalculateNumyhinyhang();
+
+            }
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(Question.this, R.style.AlertDialogCustom);
@@ -440,12 +444,9 @@ public class Question extends AppCompatActivity implements View.OnClickListener 
                         DefaultResponse res = response.body();
 
                         if (res.isStatus()) {
-                            SharedPreferences sp = getSharedPreferences("Log in", MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sp.edit();
-
-                            editor.putString("numYhin", String.valueOf(s1));
-                            editor.putString("numYhang", String.valueOf(s2));
-                            editor.commit();
+                            logInEditor.putString("numYhin", s1);
+                            logInEditor.putString("numYhang", s2);
+                            logInEditor.commit();
 
                             Intent intent = new Intent(Question.this, MainActivity.class);
                             startActivity(intent);

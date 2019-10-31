@@ -7,13 +7,19 @@
     tools:context=".Fragments.Fragment_foodcomment">
 
     <!-- TODO: Update blank fragment layout -->
-
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="match_parent" />
 
-        />
+    <TextView
+        android:id="@+id/text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="@font/printable4u"
+        android:text="ไม่มีอาหารที่แนะนำ"
+        android:textSize="30dp"
+        android:visibility="gone" />
 
 </FrameLayout>

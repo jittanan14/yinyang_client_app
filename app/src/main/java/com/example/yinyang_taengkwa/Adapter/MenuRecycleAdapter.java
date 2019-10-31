@@ -20,6 +20,7 @@ import com.example.yinyang_taengkwa.activities.MainActivity;
 import com.example.yinyang_taengkwa.api.RetrofitClient;
 import com.example.yinyang_taengkwa.models.DefaultResponse;
 import com.example.yinyang_taengkwa.models.Menu;
+import com.example.yinyang_taengkwa.models.MenuFavoriteResponse;
 import com.example.yinyang_taengkwa.models.MenuUser;
 import com.example.yinyang_taengkwa.models.MenuUserResponse;
 import com.example.yinyang_taengkwa.models.User;
@@ -40,14 +41,21 @@ public class MenuRecycleAdapter extends RecyclerView.Adapter<MenuRecycleAdapter.
 
     private Context mContext;
     private List<Menu> mMenuList;
+
     SharedPreferences sp;
     SharedPreferences.Editor editor;
+
     Calendar calendar;
     double sum_yin_menu = 0.0;
     double sum_yang_menu = 0.0;
     RetrofitClient retro;
-    double yin_user =0.0 ;
-    double yang_user=0.0;
+    double yin_user = 0.0;
+    double yang_user = 0.0;
+
+    private String faMenuOld = "";
+    private String faMenuNew = "";
+
+    private String[] fmArr;
 
     private String url = "http://pilot.cp.su.ac.th/usr/u07580536/yhinyhang/images/menu/";
 
@@ -57,9 +65,10 @@ public class MenuRecycleAdapter extends RecyclerView.Adapter<MenuRecycleAdapter.
         void onItemClick(Menu item);
     }
 
-    public MenuRecycleAdapter(Context mContext, List<Menu> mMenuList) {
+    public MenuRecycleAdapter(Context mContext, List<Menu> mMenuList, String[] fmArr) {
         this.mContext = mContext;
         this.mMenuList = mMenuList;
+        this.fmArr = fmArr;
     }
 
     @NonNull
@@ -141,53 +150,119 @@ public class MenuRecycleAdapter extends RecyclerView.Adapter<MenuRecycleAdapter.
         }
 
         public void setFavoriteToggle() {
-            if (menu.getFavorite() == 0) {
-                favoriteToggle.setChecked(false);
-                favoriteToggle.setBackgroundResource(R.drawable.ic_favorite_border_black_24dp);
-            } else {
-                favoriteToggle.setChecked(true);
-                favoriteToggle.setBackgroundResource(R.drawable.ic_favorite_black_24dp);
+
+//            for(String fm : fmArr) {
+//                Log.e("Favorite Menu", fm);
+//                if(fm.equals(String.valueOf(menu.getId_menu()))) {
+//                    favoriteToggle.setChecked(false);
+//                    favoriteToggle.setBackgroundResource(R.drawable.ic_favorite_black_24dp);
+//                    break;
+//                }
+//            }
+            if (fmArr != null) {
+
+                if ("29,4,5,3,6".contains(String.valueOf(menu.getId_menu()))) {
+                    favoriteToggle.setChecked(false);
+                    favoriteToggle.setBackgroundResource(R.drawable.ic_favorite_black_24dp);
+                }
             }
+
+//            if (menu.getFavorite() == 0) {
+//                favoriteToggle.setChecked(false);
+//                favoriteToggle.setBackgroundResource(R.drawable.ic_favorite_border_black_24dp);
+//            } else {
+//                favoriteToggle.setChecked(true);
+//                favoriteToggle.setBackgroundResource(R.drawable.ic_favorite_black_24dp);
+//            }
 
             favoriteToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                     if (isChecked) {
                         favoriteToggle.setBackgroundResource(R.drawable.ic_favorite_black_24dp);
-                        menu.setFavorite(1);
+                        //  menu.setFavorite(1);
 
-                        Call<DefaultResponse> call = RetrofitClient.getInstance().getApi().updateFavorite(menu.getName_menu(), 1);
-                        call.enqueue(new Callback<DefaultResponse>() {
-                            @Override
-                            public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
-                                DefaultResponse res = response.body();
+                        String email = sp.getString("email", "");
 
-                            }
+                        getFavoriteMenu(email);
 
-                            @Override
-                            public void onFailure(Call<DefaultResponse> call, Throwable t) {
+                        faMenuNew = faMenuOld + menu.getName_menu();
 
-                            }
-                        });
+                        updateFavoriteMenu(email, faMenuNew);
+
+//                        getFavoriteMenu(email);
+
+
+//                        Call<DefaultResponse> call = RetrofitClient.getInstance().getApi().updateFavorite(menu.getName_menu(), 1);
+//                        call.enqueue(new Callback<DefaultResponse>() {
+//                            @Override
+//                            public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
+//                                DefaultResponse res = response.body();
+//
+//                            }
+//
+//                            @Override
+//                            public void onFailure(Call<DefaultResponse> call, Throwable t) {
+//
+//                            }
+//                        });
+
+
+//                        Call<DefaultResponse> call = RetrofitClient.getInstance().getApi().createFavoriteUser(email, menu.getName_menu(), 1);
+//                        call.enqueue(new Callback<DefaultResponse>() {
+//                            @Override
+//                            public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
+//                                DefaultResponse res = response.body();
+//                                Log.e("fav", String.valueOf(menu.getId_menu()));
+//                                Log.e("name", menu.getName_menu());
+//
+//                            }
+//
+//                            @Override
+//                            public void onFailure(Call<DefaultResponse> call, Throwable t) {
+//
+//                            }
+//                        });
+
 
                     } else {
                         favoriteToggle.setBackgroundResource(R.drawable.ic_favorite_border_black_24dp);
                         menu.setFavorite(0);
 
-                        Call<DefaultResponse> call = RetrofitClient.getInstance().getApi().updateFavorite(menu.getName_menu(), 0);
-                        call.enqueue(new Callback<DefaultResponse>() {
-                            @Override
-                            public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
-                                DefaultResponse res = response.body();
+                        String email = sp.getString("email", "");
 
+                        getFavoriteMenu(email);
 
-                            }
+//                        Call<DefaultResponse> call = RetrofitClient.getInstance().getApi().updateFavorite(menu.getName_menu(), 0);
+//                        call.enqueue(new Callback<DefaultResponse>() {
+//                            @Override
+//                            public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
+//                                DefaultResponse res = response.body();
+//
+//
+//                            }
+//
+//                            @Override
+//                            public void onFailure(Call<DefaultResponse> call, Throwable t) {
+//
+//                            }
+//                        });
 
-                            @Override
-                            public void onFailure(Call<DefaultResponse> call, Throwable t) {
-
-                            }
-                        });
+//                        String email = sp.getString("email", "");
+//                        Call<DefaultResponse> call = RetrofitClient.getInstance().getApi().createFavoriteUser(email, menu.getId_menu(), 0);
+//                        call.enqueue(new Callback<DefaultResponse>() {
+//                            @Override
+//                            public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
+//                                DefaultResponse res = response.body();
+//
+//
+//                            }
+//
+//                            @Override
+//                            public void onFailure(Call<DefaultResponse> call, Throwable t) {
+//
+//                            }
+//                        });
 
                         Log.e("Toggle", String.valueOf(favoriteToggle.isChecked()));
                     }
@@ -298,9 +373,9 @@ public class MenuRecycleAdapter extends RecyclerView.Adapter<MenuRecycleAdapter.
                         chooseCheck.setBackgroundResource(R.drawable.checkmark_choose);
                         menu.setChoose(0);
 
-                        String email = sp.getString("email"," ");
-                        String yin = sp.getString("numYhin"," ");
-                        String yang = sp.getString("numYhang"," ");
+                        String email = sp.getString("email", " ");
+                        String yin = sp.getString("numYhin", " ");
+                        String yang = sp.getString("numYhang", " ");
 
                         Call<DefaultResponse> call3 = retro.getApi().updateYhinYhang(Double.parseDouble(yin), Double.parseDouble(yang), email);
                         call3.enqueue(new Callback<DefaultResponse>() {
@@ -342,35 +417,30 @@ public class MenuRecycleAdapter extends RecyclerView.Adapter<MenuRecycleAdapter.
                         final ArrayList<String> newList = new ArrayList<>();
 
 
-                        final Call<MenuUserResponse> call2 = RetrofitClient.getInstance().getApi().getMenuUser(user_id);
+                        Call<MenuUserResponse> call2 = RetrofitClient.getInstance().getApi().getMenuUser(user_id);
                         call2.enqueue(new Callback<MenuUserResponse>() {
                             @Override
                             public void onResponse(Call<MenuUserResponse> call, Response<MenuUserResponse> response) {
                                 MenuUserResponse res = response.body();
                                 List<MenuUser> menuUserList = res.getMenuUser();
 
-
                                 if (res.isStatus()) {
 
-                                    MenuUser mu = checkDate(menuUserList, date);
+                                    MenuUser menuOnDB = checkDate(menuUserList, date);
 
-                                 //   Log.e("Uncheck", mu.getMenu_id());
+                                    Log.e("Menu ID", menuOnDB.getMenu_id());
 
-                                    final String[] menuOnDB = mu.getMenu_id().split(",");
+                                    String[] menuOnDBArr = menuOnDB.getMenu_id().split(",");
+
                                     String menuUpDB = "";
-                                    for (int i = 0; i < menuOnDB.length; i++) {
-
-                                        if (!menuOnDB[i].equals(menu.getName_menu())) {
-                                            if (i == (menuOnDB.length - 1)) {
-                                                menuUpDB += menuOnDB[i];
-                                                System.out.println("DBlength : " + menuOnDB.length);
-                                            } else {
-                                                menuUpDB += menuOnDB[i] + ",";
-                                                System.out.println("DBsize : " + menuOnDB.length);
-                                            }
-
+                                    for (int i = 0; i < menuOnDBArr.length; i++) {
+                                        if(!menuOnDBArr[i].equals(menu.getName_menu())) {
+                                            if(i != (menuOnDBArr.length - 1))
+                                                menuUpDB += menuOnDBArr[i] + ",";
+                                            else
+                                                menuUpDB += menuOnDBArr[i];
+                                            System.out.println("DBlength : " + menuUpDB);
                                         }
-
                                     }
 
                                     if (menuUpDB.equals(",")) {
@@ -408,6 +478,44 @@ public class MenuRecycleAdapter extends RecyclerView.Adapter<MenuRecycleAdapter.
             });
         }
 
+        private void getFavoriteMenu(String email) {
+            Call<MenuFavoriteResponse> call = RetrofitClient.getInstance().getApi().getFavoriteMenu(email);
+            call.enqueue(new Callback<MenuFavoriteResponse>() {
+                @Override
+                public void onResponse(Call<MenuFavoriteResponse> call, Response<MenuFavoriteResponse> response) {
+                    MenuFavoriteResponse res = response.body();
+
+                    if(res.isStatus()) {
+                        faMenuOld = res.getFavoriteMenu();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<MenuFavoriteResponse> call, Throwable t) {
+                    Log.e("Get Fa Menu RE", t.getMessage());
+                }
+            });
+        }
+
+        private void updateFavoriteMenu(String email, String favoriteMenu) {
+            Call<DefaultResponse> call = RetrofitClient.getInstance().getApi().updateFavoriteUser(email, favoriteMenu);
+            call.enqueue(new Callback<DefaultResponse>() {
+                @Override
+                public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
+                    DefaultResponse res = response.body();
+
+                    if(res.isStatus()) {
+                        Toast.makeText(mContext, "Update Success", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<DefaultResponse> call, Throwable t) {
+                    Log.e("Update Favorite Menu", t.getMessage());
+                }
+            });
+        }
+
     }
 
 
@@ -426,14 +534,14 @@ public class MenuRecycleAdapter extends RecyclerView.Adapter<MenuRecycleAdapter.
     }
 
 
-    Double yin_update =0.0;
-    Double yang_update=0.0;
+    Double yin_update = 0.0;
+    Double yang_update = 0.0;
 
     public void chooseAndUpdateyinyang_user(String num_yhin, String num_yhang) {
         sp = mContext.getSharedPreferences("Log in", Context.MODE_PRIVATE);
         String email = sp.getString("email", " ");
-        String yin = sp.getString("numYhin"," ");
-        String yang = sp.getString("numYhang"," ");
+        String yin = sp.getString("numYhin", " ");
+        String yang = sp.getString("numYhang", " ");
 
 
         yin_user = Double.parseDouble(yin);
@@ -453,7 +561,7 @@ public class MenuRecycleAdapter extends RecyclerView.Adapter<MenuRecycleAdapter.
         Log.e("Num Yang", String.valueOf(num_yang_menu));
 
         double yinmax = Math.abs(Double.parseDouble(String.format("%.2f", yin_user - 2.4)));
-        double yinmin = Math.abs(Double.parseDouble(String.format("%.2f", yin_user- 2.6)));
+        double yinmin = Math.abs(Double.parseDouble(String.format("%.2f", yin_user - 2.6)));
 
         double yangmax = Math.abs(Double.parseDouble(String.format("%.2f", yang_user - 2.4)));
         double yangmin = Math.abs(Double.parseDouble(String.format("%.2f", yang_user - 2.6)));
@@ -461,16 +569,16 @@ public class MenuRecycleAdapter extends RecyclerView.Adapter<MenuRecycleAdapter.
         if (sum_yin_menu >= yinmin && sum_yin_menu <= yinmax) {
             if (sum_yin_menu == num_yin_menu) {
                 sum_yin_menu = Double.parseDouble(String.format("%.2f", sum_yin_menu));
-            }else {
+            } else {
                 sum_yin_menu += Double.parseDouble(String.format("%.2f", sum_yin_menu));
             }
         }
 
         if (sum_yang_menu >= yangmin && sum_yang_menu <= yangmax) {
-            if (sum_yang_menu == num_yang_menu){
-                sum_yang_menu = Double.parseDouble(String.format("%.2f", sum_yang_menu)) ;
-            }else {
-                sum_yang_menu += Double.parseDouble(String.format("%.2f", sum_yang_menu)) ;
+            if (sum_yang_menu == num_yang_menu) {
+                sum_yang_menu = Double.parseDouble(String.format("%.2f", sum_yang_menu));
+            } else {
+                sum_yang_menu += Double.parseDouble(String.format("%.2f", sum_yang_menu));
             }
 
         }
@@ -500,14 +608,13 @@ public class MenuRecycleAdapter extends RecyclerView.Adapter<MenuRecycleAdapter.
     }
 
 
-
     public void Calculate_yinyang_user() {
         sp = mContext.getSharedPreferences("Log in", Context.MODE_PRIVATE);
         editor = sp.edit();
 
         String email = sp.getString("email", " ");
-        String yin = sp.getString("numYhin"," ");
-        String yang = sp.getString("numYhang"," ");
+        String yin = sp.getString("numYhin", " ");
+        String yang = sp.getString("numYhang", " ");
 
 
         yin_user = Double.parseDouble(yin);
@@ -537,23 +644,19 @@ public class MenuRecycleAdapter extends RecyclerView.Adapter<MenuRecycleAdapter.
             yin_user = Math.abs(yin_user + sum_yin_menu);
             yang_user = Math.abs(yang_user - sum_yang_menu);
 
-        }else  if(yin_user < 2.4 && yang_user>=2.4 && yang_user<=2.6){
+        } else if (yin_user < 2.4 && yang_user >= 2.4 && yang_user <= 2.6) {
             yin_user = Math.abs(yin_user + sum_yin_menu);
             yang_user = Math.abs(yang_user + sum_yang_menu);
-        }
-        else if(yin_user>=2.4 && yin_user<=2.6 && yang_user < 2.4){
+        } else if (yin_user >= 2.4 && yin_user <= 2.6 && yang_user < 2.4) {
             yin_user = Math.abs(yin_user + sum_yin_menu);
             yang_user = Math.abs(yang_user + sum_yang_menu);
-        }
-        else if(yin_user > 2.6 && yang_user>=2.4 && yang_user<=2.6){
+        } else if (yin_user > 2.6 && yang_user >= 2.4 && yang_user <= 2.6) {
             yin_user = Math.abs(yin_user - sum_yin_menu);
             yang_user = Math.abs(yang_user + sum_yang_menu);
-        }
-        else if(yin_user>=2.4 && yin_user<=2.6 && yang_user > 2.6){
+        } else if (yin_user >= 2.4 && yin_user <= 2.6 && yang_user > 2.6) {
             yin_user = Math.abs(yin_user + sum_yin_menu);
             yang_user = Math.abs(yang_user - sum_yang_menu);
         }
-
 
 
         Log.e("yin", String.valueOf(yin_user));
@@ -579,6 +682,9 @@ public class MenuRecycleAdapter extends RecyclerView.Adapter<MenuRecycleAdapter.
 
 
     }
+
+
+
 
 
 }

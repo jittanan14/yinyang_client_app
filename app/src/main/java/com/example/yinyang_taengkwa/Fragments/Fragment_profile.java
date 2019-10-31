@@ -1,6 +1,7 @@
 package com.example.yinyang_taengkwa.Fragments;
 
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import com.example.yinyang_taengkwa.api.RetrofitClient;
 import com.example.yinyang_taengkwa.models.User;
 import com.squareup.picasso.Picasso;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -130,7 +132,7 @@ public class Fragment_profile extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), Question_list.class);
-                intent.putExtra("ch","1");
+                intent.putExtra("ch", "1");
                 startActivity(intent);
             }
         });
@@ -145,9 +147,61 @@ public class Fragment_profile extends Fragment {
         layout_Gotoquestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(), Question.class);
-                intent.putExtra("ch","0");
-                startActivity(intent);
+                if (Double.parseDouble(numYhin) >= 2.4 && Double.parseDouble(numYhin) <= 2.6 && Double.parseDouble(numYhang) >= 2.4 & Double.parseDouble(numYhang) <= 2.6) {
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AlertDialogCustom);
+                    builder.setMessage("ค่าหยินและหยางของคุณสมดุลแล้ว อาการของคุณเหมือนเดิมหรือมั้ย");
+                    builder.setCancelable(true);
+
+                    builder.setPositiveButton("ใช่", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            String yin = sp.getString("numYhin", "");
+                            String yang = sp.getString("numYhang", "");
+
+                            numYhinTextView.setText(yin);
+                            numYhangTextView.setText(yang);
+
+                        }
+                    });
+
+                    builder.setNegativeButton("ไม่", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(getContext(), Question.class);
+                            intent.putExtra("ch", "0");
+                            startActivity(intent);
+                        }
+                    });
+
+                    builder.show();
+
+                } else {
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AlertDialogCustom);
+                    builder.setMessage("ต้องการทำแบบสอบถามใหม่หรือไม่");
+                    builder.setCancelable(true);
+
+                    builder.setPositiveButton("ใช่", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(getContext(), Question.class);
+                            intent.putExtra("ch", "0");
+                            startActivity(intent);
+
+                        }
+                    });
+
+                    builder.setNegativeButton("ไม่", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+
+                    builder.show();
+                }
             }
         });
 
@@ -303,6 +357,19 @@ public class Fragment_profile extends Fragment {
                 numYhangTextView.setText(yang);
                 bodyTextView.setText(body);
 
+                if (Double.parseDouble(yin) >= 2.4 && Double.parseDouble(yin) <= 2.6 && Double.parseDouble(yang) >= 2.4 && Double.parseDouble(yang) <= 2.6) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AlertDialogCustom);
+                    builder.setMessage("ค่าหยินและหยางของคุณสมดุลแล้ว กรุณาทำลองทำแบบสอบถามใหม่วันถัดไป");
+                    builder.setCancelable(true);
+
+                    builder.setPositiveButton("ตกลง", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+                    builder.show();
+                }
             }
 
             @Override

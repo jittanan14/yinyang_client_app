@@ -8,6 +8,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,20 +18,38 @@ import com.example.yinyang_taengkwa.Adapter.MenuRecycleAdapter;
 import com.example.yinyang_taengkwa.R;
 import com.example.yinyang_taengkwa.api.RetrofitClient;
 import com.example.yinyang_taengkwa.models.Menu;
+import com.example.yinyang_taengkwa.models.MenuFavoriteResponse;
 import com.example.yinyang_taengkwa.models.Menuresponse;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FavoriteActivity extends AppCompatActivity {
-    RecyclerView recyclerView;
-    Button back;
+
+    private RecyclerView recyclerView;
+    private Button back;
+
+    private SharedPreferences sp;
+    private String PREF_NAME = "Log in";
+
+    private List<Menu> menuListOld;
+    private List<Menu> menuListNew;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite);
         getSupportActionBar().hide();
+
+        initInstance();
+        initLogic();
+    }
+
+    private void initInstance() {
+        sp = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+
+        menuListOld = new ArrayList<>();
+        menuListNew = new ArrayList<>();
 
         back = findViewById(R.id.button_back_profile);
 
@@ -48,50 +67,76 @@ public class FavoriteActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(FavoriteActivity.this);
 
         recyclerView.setLayoutManager(linearLayoutManager);
-
         //Recycler View
+    }
 
-            Call<Menuresponse> call = RetrofitClient.getInstance().getApi().getmenu();
-            call.enqueue(new Callback<Menuresponse>() {
-                @Override
-                public void onResponse(Call<Menuresponse> call, Response<Menuresponse> response) {
-                    Menuresponse res = response.body();
-                    List<Menu> menu = res.getMenu();
-                    List<Menu> menuFav = new ArrayList<>();
+    private void initLogic() {
+        getAllMenu();
+    }
 
-                    if (res.isStatus() == true) {
-                        if (menu.size() != 0) {
-                         for(int i = 0; i<menu.size(); i++){
-                             if(menu.get(i).getFavorite()==1){
-                                 menuFav.add(menu.get(i));
-                             }
-                         }
-                            MenuRecycleAdapter adapter = new MenuRecycleAdapter(FavoriteActivity.this, menuFav);
-                            recyclerView.setAdapter(adapter);
-                            adapter.setOnItemClickListener(new MenuRecycleAdapter.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(Menu item) {
-                                    Intent intent = new Intent(FavoriteActivity.this, DetailActivity.class);
-                                    intent.putExtra("DETAIL", item);
-                                    startActivity(intent);
-                                }
-                            });
+    private void getAllMenu() {
+        Call<Menuresponse> callGetMenu = RetrofitClient.getInstance().getApi().getmenu();
+        callGetMenu.enqueue(new Callback<Menuresponse>() {
+            @Override
+            public void onResponse(Call<Menuresponse> call, Response<Menuresponse> response) {
+                Menuresponse res = response.body();
 
-                        }
-                    }
+                if(res.isStatus()) {
+                    menuListOld = res.getMenu();
 
+                    getFavoriteMenu();
                 }
 
-                @Override
-                public void onFailure(Call<Menuresponse> call, Throwable t) {
-                    Log.e("Get Menu", t.getMessage());
+                Log.e("Get All Menu", String.valueOf(menuListOld.get(1).getId_menu()));
+            }
+
+            @Override
+            public void onFailure(Call<Menuresponse> call, Throwable t) {
+                Log.e("Get All Menu", t.getMessage());
+            }
+        });
+    }
+
+    private void getFavoriteMenu() {
+        String email_user = sp.getString("email", "");
+
+        Call<MenuFavoriteResponse> callGetFavorite = RetrofitClient.getInstance().getApi().getFavoriteMenu(email_user);
+        callGetFavorite.enqueue(new Callback<MenuFavoriteResponse>() {
+            @Override
+            public void onResponse(Call<MenuFavoriteResponse> call, Response<MenuFavoriteResponse> response) {
+                MenuFavoriteResponse res = response.body();
+
+                if(res.isStatus()) {
+                    if(res.getFavoriteMenu() != null)
+                        setRecyclerView(res.getFavoriteMenu().split(","));
                 }
-            });
 
+//                Log.e("Get Favorite Menu", favoriteMenu);
+            }
 
+            @Override
+            public void onFailure(Call<MenuFavoriteResponse> call, Throwable t) {
+                Log.e("Get Favotire Menu", t.getMessage());
+            }
+        });
+    }
 
+    private void setRecyclerView(String[] fmArr) {
+        for (String fm : fmArr) {
+            Log.e("Faaa", fm);
+            for(Menu menu : menuListOld) {
+                if(fm.equals(String.valueOf(menu.getId_menu()))) {
+                    menuListNew.add(menu);
 
+                    Log.e("Menu New", menu.getName_menu());
+                }
+            }
 
         }
+
+        MenuRecycleAdapter adapter = new MenuRecycleAdapter(getApplicationContext(), menuListNew, fmArr);
+
+        recyclerView.setAdapter(adapter);
     }
+}
 

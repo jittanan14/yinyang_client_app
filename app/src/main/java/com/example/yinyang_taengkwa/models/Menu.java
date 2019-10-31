@@ -7,10 +7,11 @@ import android.os.Parcelable;
 public class Menu implements Parcelable  {
 
     private String name,num_yhin,num_yhang,category,ingredient,howto,image;
-    private int favorite;
+    private int id,favorite;
     private int choose;
 
-    public Menu(String name, String num_yhin, String num_yhang, String category, String ingredient, String howto, String image, int favorite,int choose){
+    public Menu(int id,String name, String num_yhin, String num_yhang, String category, String ingredient, String howto, String image, int favorite,int choose){
+        this.id = id;
         this.name = name;
         this.num_yhin = num_yhin;
         this.num_yhang = num_yhang;
@@ -24,6 +25,7 @@ public class Menu implements Parcelable  {
     }
 
     protected Menu(Parcel in) {
+        id = in.readInt();
         name = in.readString();
         num_yhin = in.readString();
         num_yhang = in.readString();
@@ -46,6 +48,8 @@ public class Menu implements Parcelable  {
             return new Menu[size];
         }
     };
+
+    public int getId_menu(){ return  id;}
 
     public String getName_menu() { return name;}
 
@@ -74,6 +78,7 @@ public class Menu implements Parcelable  {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
         parcel.writeString(name);
         parcel.writeString(num_yhin);
         parcel.writeString(num_yhang);

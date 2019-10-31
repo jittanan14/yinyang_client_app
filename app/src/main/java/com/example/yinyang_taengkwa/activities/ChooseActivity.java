@@ -66,16 +66,17 @@ public class ChooseActivity extends AppCompatActivity {
                                 menuCh.add(menu.get(i));
                             }
                         }
-                        MenuRecycleAdapter adapter = new MenuRecycleAdapter(ChooseActivity.this, menuCh);
-                        recyclerView.setAdapter(adapter);
-                        adapter.setOnItemClickListener(new MenuRecycleAdapter.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(Menu item) {
-                                Intent intent = new Intent(ChooseActivity.this, DetailActivity.class);
-                                intent.putExtra("DETAIL", item);
-                                startActivity(intent);
-                            }
-                        });
+
+//                        MenuRecycleAdapter adapter = new MenuRecycleAdapter(ChooseActivity.this, menuCh, fmArr);
+//                        recyclerView.setAdapter(adapter);
+//                        adapter.setOnItemClickListener(new MenuRecycleAdapter.OnItemClickListener() {
+//                            @Override
+//                            public void onItemClick(Menu item) {
+//                                Intent intent = new Intent(ChooseActivity.this, DetailActivity.class);
+//                                intent.putExtra("DETAIL", item);
+//                                startActivity(intent);
+//                            }
+//                        });
 
                     }
                 }

@@ -3,6 +3,7 @@ package com.example.yinyang_taengkwa.api;
 
 import com.example.yinyang_taengkwa.models.DefaultResponse;
 import com.example.yinyang_taengkwa.models.LoginResponse;
+import com.example.yinyang_taengkwa.models.MenuFavoriteResponse;
 import com.example.yinyang_taengkwa.models.MenuUserResponse;
 import com.example.yinyang_taengkwa.models.Menuresponse;
 import com.example.yinyang_taengkwa.models.User;
@@ -103,10 +104,30 @@ public interface Api {
 
 
     @FormUrlEncoded
-    @POST("getmenu_user.php")
+    @POST("get_menu_user.php")
     Call<MenuUserResponse> getMenuUser(
             @Field("user_id") String user_id
 
+    );
+
+    @FormUrlEncoded
+    @POST("create_favorite_user.php")
+    Call<DefaultResponse> createFavoriteUser(
+            @Field("email_user") String user_id,
+            @Field("name_menu") String name_menu
+    );
+
+    @FormUrlEncoded
+    @POST("update_favorite_user.php")
+    Call<DefaultResponse> updateFavoriteUser(
+            @Field("email_user") String email_user,
+            @Field("name_menu") String name_menu
+    );
+
+    @FormUrlEncoded
+    @POST("get_favorite_menu.php")
+    Call<MenuFavoriteResponse> getFavoriteMenu(
+            @Field("email_user") String email_user
     );
 
 }

@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.example.yinyang_taengkwa.R;
 import com.example.yinyang_taengkwa.api.RetrofitClient;
+import com.example.yinyang_taengkwa.models.DefaultResponse;
 import com.example.yinyang_taengkwa.models.LoginResponse;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -107,16 +108,16 @@ public class LoginActivity extends AppCompatActivity {
 
 //                    Toast.makeText(LoginActivity.this, response.body().getMessages(), Toast.LENGTH_LONG).show();
 
-                    String email      = response.body().getUser().getEmail();
-                    String username   = response.body().getUser().getUsername();
-                    String gender     = response.body().getUser().getGender();
-                    String birthday   = response.body().getUser().getBirthday();
-                    String element    = response.body().getUser().getElement();
-                    String foodLose   = response.body().getUser().getFood();
-                    String image      = response.body().getUser().getImage_user();
-                    String body       = response.body().getUser().getBody();
-                    String numYhin    = response.body().getUser().getNum_yhin();
-                    String numYhang   = response.body().getUser().getNum_yhang();
+                    String email = response.body().getUser().getEmail();
+                    String username = response.body().getUser().getUsername();
+                    String gender = response.body().getUser().getGender();
+                    String birthday = response.body().getUser().getBirthday();
+                    String element = response.body().getUser().getElement();
+                    String foodLose = response.body().getUser().getFood();
+                    String image = response.body().getUser().getImage_user();
+                    String body = response.body().getUser().getBody();
+                    String numYhin = response.body().getUser().getNum_yhin();
+                    String numYhang = response.body().getUser().getNum_yhang();
 
                     Log.e("User", username);
 
@@ -134,8 +135,7 @@ public class LoginActivity extends AppCompatActivity {
                     edit.putBoolean("SIGNIN", true);
                     edit.commit();
 
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
+                    createDefaultData(email);
 
                 } else {
                     Toast.makeText(LoginActivity.this, response.body().getMessages(), Toast.LENGTH_LONG).show();
@@ -150,6 +150,24 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private void createDefaultData(String email) {
+        Call<DefaultResponse> call = RetrofitClient.getInstance().getApi().createFavoriteUser(email, "");
+        call.enqueue(new Callback<DefaultResponse>() {
+            @Override
+            public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
+                if(response.body().isStatus()) {
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DefaultResponse> call, Throwable t) {
+                Log.e("Create Default Data", t.getMessage());
+            }
+        });
     }
 
 

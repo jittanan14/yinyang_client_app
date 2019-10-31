@@ -5,31 +5,14 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class MenuUserResponse {
-    @SerializedName("status")
-    @Expose
-    private boolean status;
-
-    @SerializedName("messages")
-    @Expose
-    private String messages;
+public class MenuUserResponse extends DefaultResponse {
 
     @SerializedName("data")
     @Expose
     private List<MenuUser> user;
 
-    public MenuUserResponse(boolean status, String messages, List<MenuUser> user) {
-        this.status = status;
-        this.messages = messages;
-        this.user = user;
-    }
-
-    public boolean isStatus() {
-        return status;
-    }
-
-    public String getMessages() {
-        return messages;
+    public MenuUserResponse(boolean status, String messages) {
+        super(status, messages);
     }
 
     public List<MenuUser> getMenuUser() {

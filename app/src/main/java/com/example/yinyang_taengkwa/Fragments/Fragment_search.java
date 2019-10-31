@@ -177,7 +177,7 @@ public class Fragment_search extends Fragment {
                 if (statusView == false) {
 
 
-                    Animation animation = new SlideAnimation(view_sort, 0, 1000);
+                    Animation animation = new SlideAnimation(view_sort, 0, 1500);
 
                     // this interpolator only speeds up as it keeps going
                     animation.setInterpolator(new AccelerateInterpolator());
@@ -187,7 +187,7 @@ public class Fragment_search extends Fragment {
                     statusView = true;
                 } else {
 
-                    Animation animation = new SlideAnimation(view_sort, 900, 0);
+                    Animation animation = new SlideAnimation(view_sort, 1500, 0);
 
                     // this interpolator only speeds up as it keeps going
                     animation.setInterpolator(new AccelerateInterpolator());

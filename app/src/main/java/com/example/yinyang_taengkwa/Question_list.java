@@ -67,8 +67,8 @@ public class Question_list extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(Question_list.this,Question.class);
                 intent.putExtra("position_ques", (i+1));
+                intent.putExtra("ch", 1);
                 startActivity(intent);
-
             }
         });
 

@@ -330,18 +330,18 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
 
     private void initItems() {
         item.add("ไม่มี");
-        item.add("เนื้อปู");
-        item.add("เนื้อเป็ด");
-        item.add("เนื้อปลาหมึก");
-        item.add("เนื้อหอยนางรม");
-        item.add("เนื้อหอยโข่ง");
-        item.add("เนื้อห่าน");
-        item.add("เนื้อตะพาบ");
-        item.add("เนื้อเต่า");
-        item.add("เนื้อกระต่าย");
-        item.add("เนื้อปลาไหล");
-        item.add("เนื้อหอยเชลล์");
-        item.add("เนื้อปลา");
+        item.add("ปู");
+        item.add("เป็ด");
+        item.add("ปลาหมึก");
+        item.add("หอยนางรม");
+        item.add("หอยโข่ง");
+        item.add("ห่าน");
+        item.add("ตะพาบ");
+        item.add("เต่า");
+        item.add("กระต่าย");
+        item.add("ปลาไหล");
+        item.add("หอยเชลล์");
+        item.add("ปลา");
         item.add("กล้วย");
         item.add("ส้ม");
         item.add("สาลี่");
@@ -408,11 +408,11 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         item.add("รากบัว");
         item.add("ถั่วงอก");
         item.add("สะระแหน่");
-        item.add("เนื้อวัว");
-        item.add("เนื้อไก่");
-        item.add("เนื้อกุ้ง");
-        item.add("เนื้อแพะ");
-        item.add("เนื้องู");
+        item.add("วัว");
+        item.add("ไก่");
+        item.add("กุ้ง");
+        item.add("แพะ");
+        item.add("งู");
         item.add("ไข่");
         item.add("ปลาหมึกแห้ง");
         item.add("เงาะ");
